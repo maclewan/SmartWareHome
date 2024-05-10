@@ -37,12 +37,13 @@ class UpcDbApi:
             headers={"Authorization": f"Bearer {cls.API_KEY}"},
         )
         if response.status_code != 200:
-            # This is example of this kind of api, which always returns 200...
             raise RuntimeError("UpcDatabase api failed.")
+
         response_data = response.json()
-        print(response_data)
         if response_data.get("success") is not True:
+            # This is example of this kind of api, which always returns 200...
             return UpcDbResponse(code=response_data["error"]["code"])
+
         return UpcDbResponse(
             code=200,
             product=ProductData(
