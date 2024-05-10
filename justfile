@@ -24,11 +24,11 @@ csu:
 
 # black isort
 lint:
-    black --exclude migrations --line-length 80 ware_home
-    isort --profile black ware_home
+    black --exclude migrations --line-length 80 ware_home config
+    isort --profile black ware_home config
 
 # lint + tests
 pytest:
-    black --exclude migrations --line-length 80 ware_home
+    black --exclude migrations --line-length 80 ware_home config
     isort --profile black ware_home
-    docker-compose run --rm django python -m pytest ware_home/tests
+    docker-compose run --rm django python -m pytest ware_home/tests config
