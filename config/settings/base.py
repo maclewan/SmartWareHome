@@ -23,7 +23,8 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = []
 
 LOCAL_APPS = [
-    'ware_home.users.apps.UsersConfig'
+    'ware_home.users.apps.UsersConfig',
+    'ware_home.supplies.apps.SuppliesConfig',
 ]
 
 
