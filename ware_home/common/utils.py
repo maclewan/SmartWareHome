@@ -9,7 +9,7 @@ class HasExpirationDate(typing.Protocol):
 
 
 def check_expiration_date(obj: HasExpirationDate) -> bool:
-    return timezone.now().date() > obj.expiration_date + timezone.timedelta(
+    return timezone.now().date() > obj.expiration_date - timezone.timedelta(
         days=1
     )
 
