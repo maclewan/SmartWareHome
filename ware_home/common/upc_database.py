@@ -54,15 +54,15 @@ class UpcDbApi:
                 barcode=response_data["barcode"],
                 description=response_data["description"],
                 category=response_data["category"],
-                quantity=metadata.get(
-                    "quantity", ""
-                ),
+                quantity=metadata.get("quantity", ""),
             ),
         )
 
     @classmethod
     def post_product(cls, product_data: ProductData) -> bool:
-        raise NotImplementedError("UpcDatabase post endpoint is currently broken.")
+        raise NotImplementedError(
+            "UpcDatabase post endpoint is currently broken."
+        )
         # For some reason all requests causes`MySQL has encountered an error.Unknown column 'mpn' in 'field list'` error
         # Possible solution might be to use some automation script and add products on upcdatabase.org website
         # which seems to be adding products properly
@@ -76,9 +76,13 @@ class UpcDbApi:
             "asin": "",
             "msrp": "",
             "category": product_data.category,
-            "metadata": {
-                "quantity": product_data.quantity,
-            } if product_data.quantity else None,
+            "metadata": (
+                {
+                    "quantity": product_data.quantity,
+                }
+                if product_data.quantity
+                else None
+            ),
         }
         response = requests.post(
             url=f"{cls.BASE_URL}/product/{product_data.barcode}",
