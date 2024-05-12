@@ -5,8 +5,8 @@ pytest
 pytest-django
 local
 send2trash
-Werkzeug
-pyOpenSSL
+Werkzeug==3.0.3
+pyOpenSSL==24.1.0
 black==24.4.2
 isort==5.13.2
 factory-boy==3.2.1

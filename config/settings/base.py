@@ -110,3 +110,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Custom vars
 UPC_DATABASE_API_KEY = config("UPC_DATABASE_API_KEY", default="")
+
+# login url
+LOGIN_URL = "/admin/login/"
