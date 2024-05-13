@@ -7,3 +7,31 @@ class ScannerPocView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
 
     def test_func(self):
         return self.request.user.is_staff
+
+
+class DispatchView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
+    template_name = "dispatch/dispatch.html"
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+
+class AddStockView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
+    template_name = "add-stock/add-stock.html"
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+
+class PopStockView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
+    template_name = "pop-stock/pop-stock.html"
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+
+class StockListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
+    template_name = "stock/stock-list.html"
+
+    def test_func(self):
+        return self.request.user.is_staff
