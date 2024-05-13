@@ -144,3 +144,7 @@ dmypy.json
 
 # for sad people using vscode
 .vscode/
+
+
+# certs
+cert.*

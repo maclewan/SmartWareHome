@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{% block title %}My Site{% endblock %}</title>
+
+	<style>
+        body {
+            background-color: rgb(38, 36, 38);
+            margin: 0;
+        }
+
+        #top-bar, #footer {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            height: 5vh;
+        }
+
+        #content {
+            height: 90vh;
+        }
+
+        #top-bar button {
+            height: 4vh;
+            margin: 0.5vh 0.5vh;
+            width: 10vh;
+            font-size: 2vh;
+            border-radius: 1vh;
+            background-color: lightgray;
+        }
+	</style>
+	{% block styles %}{% endblock %}
+
+</head>
+<body>
+<div id="top-bar">
+	{% block top-bar %}
+		<a href="{% url 'dispatch' %}">
+			<button>Home</button>
+		</a>
+		<a href="{% url 'stock-list' %}">
+			<button>Stock</button>
+		</a>
+		<a href="{% url 'admin:index' %}">
+			<button>Admin</button>
+		</a>
+	{% endblock %}
+</div>
+<div id="content">
+	{% block content %}{% endblock %}
+</div>
+<div id="footer">
+	{% block footer %}
+
+	{% endblock %}
+</div>
+</body>
+</html>
