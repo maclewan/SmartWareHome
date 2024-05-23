@@ -1,5 +1,7 @@
 from django.db import models
 
+from ware_home.common.models import TimeStampModel
+
 
 class Category(models.Model):
     name = models.CharField(max_length=127)
@@ -22,7 +24,7 @@ class Product(models.Model):
         return f"Product #{self.id} {self.name}"
 
 
-class Supply(models.Model):
+class Supply(TimeStampModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     amount = models.DecimalField(decimal_places=1, max_digits=5)
     expiration_date = models.DateField()

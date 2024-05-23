@@ -23,7 +23,10 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-THIRD_PARTY_APPS = ["django_extensions"]
+THIRD_PARTY_APPS = [
+    "django_extensions",
+    "rest_framework",
+]
 
 LOCAL_APPS = [
     "ware_home.users.apps.UsersConfig",
@@ -62,6 +65,11 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "config.wsgi.application"
+
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
 
 
 # Database

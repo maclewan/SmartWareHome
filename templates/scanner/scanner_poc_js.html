@@ -5,31 +5,31 @@
 
   function forceRequestPermissions() {
     navigator.permissions.query({name: 'camera'})
-        .then((permissionObj) => {
-          if (permissionObj.state === "prompt") {
-            setTimeout(forceRequestPermissions, 1000);
-          } else if (permissionObj.state === "granted") {
-            fetchDevices();
-          }
-        })
-        .catch((error) => {
-          console.log('Got error :', error);
-        })
+      .then((permissionObj) => {
+        if (permissionObj.state === "prompt") {
+          setTimeout(forceRequestPermissions, 1000);
+        } else if (permissionObj.state === "granted") {
+          fetchDevices();
+        }
+      })
+      .catch((error) => {
+        console.log('Got error :', error);
+      })
   }
 
   function fetchDevices() {
     navigator.mediaDevices
-        .enumerateDevices()
-        .then((devices) => {
-          devices
-              .filter((device) => device.kind === "videoinput")
-              .forEach((device) => {
-                deviceIds.push(device.deviceId)
-              });
-        })
-        .catch((err) => {
-          console.error(`${err.name}: ${err.message}`);
-        });
+      .enumerateDevices()
+      .then((devices) => {
+        devices
+          .filter((device) => device.kind === "videoinput")
+          .forEach((device) => {
+            deviceIds.push(device.deviceId)
+          });
+      })
+      .catch((err) => {
+        console.error(`${err.name}: ${err.message}`);
+      });
   }
 
   function handleCameraChange() {
@@ -129,52 +129,53 @@
 
     if (maxItem == null) {
       resultLog.innerText = "Multiple possible detections, try again"
+      return
     }
     resultLog.innerText = "Detected bar code: " + maxItem
-    // todo
+    window.location.href = `{% url 'stock-add' %}?bar_code=${maxItem}`;
   }
 
   function restartCameraStream() {
     resultLog.innerText = ""
     resultLog.innerText = `Current camera id: ${deviceIds[currentDeviceIndex]} (${currentDeviceIndex})`
     navigator.mediaDevices.getUserMedia(
-        {
-          video: {
-            deviceId: {
-              exact: deviceIds[currentDeviceIndex],
-            },
-            width: {ideal: 1920},
-            height: {ideal: 1080},
+      {
+        video: {
+          deviceId: {
+            exact: deviceIds[currentDeviceIndex],
           },
-        }
+          width: {ideal: 1920},
+          height: {ideal: 1080},
+        },
+      }
     )
-        .then(function (stream) {
-          const video = document.getElementById('video');
-          video.srcObject = stream;
-        })
-        .catch(function (err) {
-          console.error(err);
-        });
+      .then(function (stream) {
+        const video = document.getElementById('video');
+        video.srcObject = stream;
+      })
+      .catch(function (err) {
+        console.error(err);
+      });
   }
 
   function restartAutoCameraStream() {
     resultLog.innerText = "Current camera auto"
     navigator.mediaDevices.getUserMedia(
-        {
-          video: {
-            facingMode: "environment",
-            width: {ideal: 1920},
-            height: {ideal: 1080},
-          },
-        }
+      {
+        video: {
+          facingMode: "environment",
+          width: {ideal: 1920},
+          height: {ideal: 1080},
+        },
+      }
     )
-        .then(function (stream) {
-          const video = document.getElementById('video');
-          video.srcObject = stream;
-        })
-        .catch(function (err) {
-          console.error(err);
-        });
+      .then(function (stream) {
+        const video = document.getElementById('video');
+        video.srcObject = stream;
+      })
+      .catch(function (err) {
+        console.error(err);
+      });
   }
 
   document.getElementById('scan-button').addEventListener('click', handleScan);

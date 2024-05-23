@@ -1,1 +1,169 @@
 {% extends "base.html" %}
+
+
+{% block styles %}
+	<style>
+        label {
+            color: lightgray;
+            font-size: 2.5vh;
+            padding: 5px;
+        }
+
+        input, textarea, select {
+            padding: 5px;
+            width: 65vw;
+        }
+
+        button {
+            padding: 5px;
+            width: 25vw;
+        }
+
+        textarea {
+            height: 6.5vh;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .horizontal-group {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        #amount {
+            width: 20vw;
+        }
+
+        #exp_date {
+            width: 40vw;
+        }
+
+        #bar_code {
+            width: 30vw;
+        }
+
+        #volume {
+            width: 30vw;
+        }
+
+
+	</style>
+{% endblock %}
+
+
+{% block content %}
+
+	<form id="main-form" class="container" method="post" action="">
+		{% csrf_token %}
+
+		<div class="form-group">
+			<label for="search">Search:</label>
+			<input type="text" id="search" name="search" class="form-control" placeholder="Search for items...">
+		</div>
+
+		<div class="form-group">
+			<label for="items">Items:</label>
+			<select id="items" name="items">
+				<option value="">Select an item</option>
+				<option value="">todo 1</option>
+				<option value="">todo 2</option>
+			</select>
+		</div>
+
+		<button type="button" id="scan-button" class="btn btn-primary"
+				onclick="location.href='{% url 'scanner-poc' %}'">Scan
+		</button>
+
+		<div class="form-group">
+			<label for="prod_name">Product Name:</label>
+			<input type="text" id="prod_name" name="prod_name" class="form-control"
+				   placeholder="Enter product name">
+		</div>
+		<div class="horizontal-group">
+			<div class="form-group">
+				<label for="bar_code">Bar Code:</label>
+				<input type="text" id="bar_code" name="bar_code" class="form-control" placeholder="Enter bar code">
+			</div>
+
+			<div class="form-group">
+				<label for="volume">Volume:</label>
+				<input type="text" id="volume" name="volume" class="form-control"
+					   placeholder="Volume">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="description">Description:</label>
+			<textarea id="description" name="description" class="form-control"
+					  placeholder="Enter description"></textarea>
+		</div>
+
+		<div class="horizontal-group">
+			<div class="form-group">
+				<label for="amount">Amount:</label>
+				<input type="number" id="amount" name="amount" class="form-control" placeholder="Enter amount">
+			</div>
+
+			<div class="form-group">
+				<label for="exp_date">Expiration Date:</label>
+				<input type="date" id="exp_date" name="exp_date" class="form-control">
+			</div>
+		</div>
+
+
+		<button type="submit" class="btn btn-success">Add Entity</button>
+	</form>
+
+	<script>
+      document.addEventListener("DOMContentLoaded", () => {
+        handlePageLoaded();
+      });
+      const mainForm = document.getElementById("main-form")
+
+
+      async function handleProductResponse(response) {
+        if (response.status !== 200) {
+          console.log(response)
+          // todo - set some flag that product is new, else set flag that product exists
+          return true
+        }
+        const responseData = await response.json()
+        console.log(responseData)
+        mainForm.elements["prod_name"].value = responseData.name;
+        mainForm.elements["bar_code"].value = responseData.bar_code;
+        mainForm.elements["volume"].value = responseData.volume
+        mainForm.elements["description"].value = responseData.description
+      }
+
+      function handlePageLoaded() {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const bar_code = urlParams.get('bar_code')
+        if (bar_code === null) return;
+
+        fetch(`/api/supplies/product/${bar_code}`)
+          .then(response => {
+            handleProductResponse(response)
+          })
+          .catch(error => console.error('Error fetching items:', error));
+      }
+
+	</script>
+{% endblock %}

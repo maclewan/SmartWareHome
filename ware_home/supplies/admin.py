@@ -28,6 +28,8 @@ class SupplyAdmin(admin.ModelAdmin):
         "get_expired",
     ]
 
+    readonly_fields = ["created_at", "updated_at"]
+
     def get_expired(self, obj: Supply) -> str:
         x_ascii = "\u274c"
         return f"{x_ascii}" if check_expiration_date(obj) else ""
