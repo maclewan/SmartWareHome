@@ -15,7 +15,7 @@ class Category(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
-    bar_code = models.CharField(max_length=63)
+    bar_code = models.CharField(max_length=63, unique=True)
     description = models.TextField()
     volume = models.CharField(max_length=127, null=True, blank=True)
     categories = models.ManyToManyField(Category)

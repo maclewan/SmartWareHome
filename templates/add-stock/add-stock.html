@@ -48,6 +48,12 @@
             gap: 10px;
         }
 
+        .btn-success {
+            margin: 10px;
+            width: 35vw;
+            height: 10vw;
+        }
+
         #amount {
             width: 20vw;
         }
@@ -64,6 +70,14 @@
             width: 30vw;
         }
 
+        .form-control:invalid {
+            border: 2px dashed red;
+        }
+
+        .form-control:valid {
+            border: 2px solid black;
+        }
+
 
 	</style>
 {% endblock %}
@@ -71,7 +85,7 @@
 
 {% block content %}
 
-	<form id="main-form" class="container" method="post" action="">
+	<form id="main-form" class="container">
 		{% csrf_token %}
 
 		<div class="form-group">
@@ -89,46 +103,46 @@
 		</div>
 
 		<button type="button" id="scan-button" class="btn btn-primary"
-				onclick="location.href='{% url 'scanner-poc' %}'">Scan
+				onclick="location.href='{% url 'scanner-poc' %}';">Scan
 		</button>
 
 		<div class="form-group">
 			<label for="prod_name">Product Name:</label>
 			<input type="text" id="prod_name" name="prod_name" class="form-control"
-				   placeholder="Enter product name">
+				   placeholder="Enter product name" required>
 		</div>
 		<div class="horizontal-group">
 			<div class="form-group">
 				<label for="bar_code">Bar Code:</label>
-				<input type="text" id="bar_code" name="bar_code" class="form-control" placeholder="Enter bar code">
+				<input type="text" id="bar_code" name="bar_code" class="form-control" placeholder="Enter bar code"
+					   required>
 			</div>
 
 			<div class="form-group">
 				<label for="volume">Volume:</label>
 				<input type="text" id="volume" name="volume" class="form-control"
-					   placeholder="Volume">
+					   placeholder="Volume" required>
 			</div>
 		</div>
 		<div class="form-group">
 			<label for="description">Description:</label>
 			<textarea id="description" name="description" class="form-control"
-					  placeholder="Enter description"></textarea>
+					  placeholder="Enter description" required></textarea>
 		</div>
 
 		<div class="horizontal-group">
 			<div class="form-group">
 				<label for="amount">Amount:</label>
-				<input type="number" id="amount" name="amount" class="form-control" placeholder="Enter amount">
+				<input type="number" id="amount" name="amount" class="form-control" placeholder="Enter amount" required>
 			</div>
 
 			<div class="form-group">
 				<label for="exp_date">Expiration Date:</label>
-				<input type="date" id="exp_date" name="exp_date" class="form-control">
+				<input type="date" id="exp_date" name="exp_date" class="form-control" required>
 			</div>
 		</div>
 
-
-		<button type="submit" class="btn btn-success">Add Entity</button>
+		<button type="button" id="button-add" class="btn-success" onclick="handleAdd();">Add</button>
 	</form>
 
 	<script>
@@ -136,20 +150,28 @@
         handlePageLoaded();
       });
       const mainForm = document.getElementById("main-form")
+      let productExists = false
+      let productId = 0
 
 
-      async function handleProductResponse(response) {
-        if (response.status !== 200) {
-          console.log(response)
-          // todo - set some flag that product is new, else set flag that product exists
+      async function handleProductResponse(bar_code, response) {
+        mainForm.elements["bar_code"].value = bar_code;
+
+        productExists = (response.status === 200)
+
+        if (!productExists) {
           return true
         }
+
         const responseData = await response.json()
-        console.log(responseData)
-        mainForm.elements["prod_name"].value = responseData.name;
-        mainForm.elements["bar_code"].value = responseData.bar_code;
+        mainForm.elements["prod_name"].value = responseData.name
         mainForm.elements["volume"].value = responseData.volume
         mainForm.elements["description"].value = responseData.description
+        mainForm.elements["bar_code"].readOnly = true
+        productId = responseData.id
+        console.log(`Product exists with id ${productId}`)
+
+        return true
       }
 
       function handlePageLoaded() {
@@ -158,11 +180,74 @@
         const bar_code = urlParams.get('bar_code')
         if (bar_code === null) return;
 
-        fetch(`/api/supplies/product/${bar_code}`)
+        fetch(`/api/supplies/product/${bar_code}/`)
           .then(response => {
-            handleProductResponse(response)
+            handleProductResponse(bar_code, response)
           })
           .catch(error => console.error('Error fetching items:', error));
+      }
+
+      async function createProduct() {
+        let payload = {
+          name: mainForm.elements["prod_name"].value,
+          bar_code: mainForm.elements["bar_code"].value,
+          description: mainForm.elements["prod_name"].value,
+          volume: mainForm.elements["volume"].value,
+        }
+        let response = await fetch("/api/supplies/product/", {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+          },
+          body: JSON.stringify(payload)
+        })
+
+        if (response.status !== 201) {
+          // todo raise prod not created for some reason
+          return
+        }
+        let responseData = await response.json()
+
+        productId = responseData.id
+        console.log(`Product created with id ${productId}`)
+
+        return productId
+      }
+
+      async function handleAdd() {
+        if (!mainForm.checkValidity()) return;
+        if (!productExists) {
+          await createProduct()
+        }
+        if (productId === 0) {
+          // todo handle missing id error
+          return false
+        }
+
+        let payload = {
+          amount: mainForm.elements["amount"].value,
+          expiration_date: mainForm.elements["exp_date"].value,
+          product: productId,
+        }
+        let response = await fetch("/api/supplies/supply/", {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+          },
+          body: JSON.stringify(payload)
+        })
+
+        if (response.status !== 201) {
+          // todo raise supply not created for some reason
+          return
+        }
+        let responseData = await response.json()
+        console.log(`Supply created with id ${responseData.id}`)
+
+        // todo handle supply created message
+        // todo clear form, clear url (?)
       }
 
 	</script>
