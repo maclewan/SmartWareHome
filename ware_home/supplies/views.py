@@ -17,14 +17,14 @@ class DispatchView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
 
 
 class AddStockView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
-    template_name = "add-stock/add-stock.html"
+    template_name = "add-stock/add_stock.html"
 
     def test_func(self):
         return self.request.user.is_staff
 
 
 class PopStockView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
-    template_name = "pop-stock/pop-stock.html"
+    template_name = "pop-stock/pop_stock.html"
 
     def test_func(self):
         return self.request.user.is_staff
