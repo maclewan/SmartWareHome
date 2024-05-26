@@ -1,37 +1,21 @@
 <script>
+
+  const mainForm = document.getElementById("main-form")
+  const content = document.getElementById('content')
+  let productExists = false
+  let productOriginalData = {}
+  let productId = undefined
+
   document.addEventListener("DOMContentLoaded", () => {
     handlePageLoaded();
   });
-  const mainForm = document.getElementById("main-form")
-  let productExists = false
-  let productId = 0
-
-
-  async function handleProductResponse(bar_code, response) {
-    mainForm.elements["bar_code"].value = bar_code;
-
-    productExists = (response.status === 200)
-
-    if (!productExists) {
-      return true
-    }
-
-    const responseData = await response.json()
-    mainForm.elements["prod_name"].value = responseData.name
-    mainForm.elements["volume"].value = responseData.volume
-    mainForm.elements["description"].value = responseData.description
-    mainForm.elements["bar_code"].readOnly = true
-    productId = responseData.id
-    console.log(`Product exists with id ${productId}`)
-
-    return true
-  }
 
   function handlePageLoaded() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const bar_code = urlParams.get('bar_code')
     if (bar_code === null) return;
+    mainForm.elements["bar_code"].value = bar_code;
 
     fetch(`/api/supplies/product/${bar_code}/`)
       .then(response => {
@@ -40,42 +24,130 @@
       .catch(error => console.error('Error fetching items:', error));
   }
 
-  async function createProduct() {
-    let payload = {
+  function resetProductAddForm() {
+    mainForm.reset()
+    productExists = false
+    productOriginalData = {}
+    productId = undefined
+  }
+
+  function showPopupMessage(success, text) {
+    const successTypeColorMap = new Map()
+    successTypeColorMap.set("yes", "green")
+    successTypeColorMap.set("no", "red")
+
+    const color = successTypeColorMap.get(success)
+    const popupDiv = document.createElement('div');
+    popupDiv.className = `elementToFadeInAndOut popup-message ${color === undefined ? "grey" : color}-popup-message`
+    popupDiv.innerHTML = `${text}`
+    content.appendChild(popupDiv);
+    setTimeout(() => {
+      content.removeChild(popupDiv);
+    }, 5000)
+  }
+
+  function storeOriginalProductData(responseData) {
+    productOriginalData.prod_name = responseData.name
+    productOriginalData.volume = responseData.volume
+    productOriginalData.description = responseData.description
+  }
+
+  function hasOriginalProductDataChanged() {
+    return ["prod_name", "volume", "description"].map(
+      (key) =>
+        productOriginalData[key] === mainForm.elements[key].value
+    ).some((val) => val === false)
+  }
+
+  async function handleProductResponse(bar_code, response) {
+    productExists = (response.status === 200)
+    if (!productExists) {
+      showPopupMessage("partial", "Product not in database.")
+      return true
+    }
+
+    const responseData = await response.json()
+
+    mainForm.elements["prod_name"].value = responseData.name
+    mainForm.elements["volume"].value = responseData.volume
+    mainForm.elements["description"].value = responseData.description
+    mainForm.elements["bar_code"].readOnly = true
+    productId = responseData.id
+
+    storeOriginalProductData(responseData)
+    console.log(`Product exists with id ${productId}`)
+
+    return true
+  }
+
+  function getProductPayload() {
+    return {
       name: mainForm.elements["prod_name"].value,
       bar_code: mainForm.elements["bar_code"].value,
       description: mainForm.elements["prod_name"].value,
       volume: mainForm.elements["volume"].value,
     }
+  }
+
+  function getRequestHeaders() {
+    return {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': '{{ csrf_token }}'
+    }
+  }
+
+  async function createProduct() {
+    let payload = getProductPayload()
     let response = await fetch("/api/supplies/product/", {
       method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': '{{ csrf_token }}'
-      },
+      headers: getRequestHeaders(),
       body: JSON.stringify(payload)
     })
 
     if (response.status !== 201) {
-      // todo raise prod not created for some reason
-      return
+      showPopupMessage("no", "Product was NOT created properly...")
+      return undefined
     }
     let responseData = await response.json()
-
-    productId = responseData.id
     console.log(`Product created with id ${productId}`)
+    return responseData.id
+  }
 
-    return productId
+  async function updateProduct() {
+    let payload = getProductPayload()
+    let bar_code = mainForm.elements["bar_code"].value
+    let response = await fetch(`/api/supplies/product/${bar_code}/`, {
+      method: "PATCH",
+      headers: getRequestHeaders(),
+      body: JSON.stringify(payload)
+    })
+
+    if (response.status !== 200) {
+      showPopupMessage("no", "Product was NOT updated properly...")
+      return undefined
+    }
+    let responseData = await response.json()
+    console.log(`Product (id ${productId}) updated`)
+    return responseData.id
   }
 
   async function handleAdd() {
-    if (!mainForm.checkValidity()) return;
-    if (!productExists) {
-      await createProduct()
+    if (!mainForm.checkValidity()) {
+      showPopupMessage("partial", "Fill out all fields...")
+      return
     }
-    if (productId === 0) {
-      // todo handle missing id error
-      return false
+    if (!productExists) {
+      productId = await createProduct()
+    }
+    if (productId === undefined) {
+      return
+    }
+
+    if (productExists && hasOriginalProductDataChanged()) {
+      const updatedId = await updateProduct()
+      if (updatedId !== productId) {
+        return
+      }
     }
 
     let payload = {
@@ -93,14 +165,18 @@
     })
 
     if (response.status !== 201) {
-      // todo raise supply not created for some reason
+      showPopupMessage("no", "Supply was not created properly...")
       return
     }
     let responseData = await response.json()
-    console.log(`Supply created with id ${responseData.id}`)
 
-    // todo handle supply created message
-    // todo clear form, clear url (?)
+    if (productExists) {
+      showPopupMessage("yes", `Supply for "${mainForm.elements["prod_name"].value}" (${responseData.amount} pcs)  added.`)
+    } else {
+      showPopupMessage("yes", `Product "${mainForm.elements["prod_name"].value}" (${responseData.amount} pcs) created, supply added.`)
+    }
+
+    resetProductAddForm()
   }
 
 </script>

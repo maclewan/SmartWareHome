@@ -78,6 +78,47 @@
             border: 2px solid black;
         }
 
+        .popup-message {
+		{#display: none; /* Start with the message hidden */#} position: fixed;
+            bottom: 5px;
+            left: 5px;
+            right: 5px;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000; /* Ensure it is on top of other elements */
+            text-align: center;
+        }
+
+        .green-popup-message {
+            background-color: #d4edda;
+            color: green;
+            border: 1px solid green;
+        }
+
+        .red-popup-message {
+            background-color: #edd4d4;
+            color: red;
+            border: 1px solid red;
+        }
+
+		.grey-popup-message {
+            background-color: #b2b2b2;
+            color: #494949;
+            border: 1px solid #494949;
+        }
+
+        .elementToFadeInAndOut {
+            animation: fadeinout 5s ease forwards;
+        }
+
+        @keyframes fadeinout {
+            0%, 100% {
+                opacity: 0;
+            }
+            20%, 80% {
+                opacity: 1;
+            }
+        }
 
 	</style>
 {% endblock %}

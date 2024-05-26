@@ -5,7 +5,7 @@ from ware_home.supplies.models import Product, Supply
 from ware_home.supplies.serializers import ProductSerializer, SupplySerializer
 
 
-class ProductDetailApiView(generics.RetrieveAPIView):
+class ProductDetailApiView(generics.RetrieveUpdateAPIView):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
     permission_classes = [IsAuthenticated]
