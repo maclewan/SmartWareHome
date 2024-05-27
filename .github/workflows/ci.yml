@@ -18,7 +18,7 @@ jobs:
           pip install -r requirements/local.txt
       - name: black
         run: |
-          black --check --diff --exclude migrations --line-length 80 ware_home config
+          black --check --diff --exclude migrations --line-length 88 ware_home config
       - name: isort
         run: |
           isort --profile black --check-only ware_home config
