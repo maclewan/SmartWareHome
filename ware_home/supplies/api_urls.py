@@ -1,6 +1,11 @@
 from django.urls import path
 
-from .api_views import ProductCreateApiView, ProductDetailApiView, SupplyCreateApiView
+from .api_views import (
+    ProductCreateApiView,
+    ProductDetailApiView,
+    SupplyCreateApiView,
+    SupplyFilterApiView,
+)
 
 urlpatterns = [
     path(
@@ -17,5 +22,10 @@ urlpatterns = [
         "supply/",
         SupplyCreateApiView.as_view(),
         name="supply-create",
+    ),
+    path(
+        "supply/for-product/<str:bar_code>/",
+        SupplyFilterApiView.as_view(),
+        name="supply-filter-list",
     ),
 ]

@@ -22,3 +22,15 @@ class SupplyCreateApiView(generics.CreateAPIView):
     serializer_class = SupplySerializer
     queryset = Supply.objects.all()
     permission_classes = [IsAuthenticated]
+
+
+# todo TESTS
+class SupplyFilterApiView(generics.ListAPIView):
+    serializer_class = SupplySerializer
+    queryset = Supply.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return self.queryset.select_related("product").filter(
+            product__bar_code=self.kwargs["bar_code"]
+        ).order_by("expiration_date")

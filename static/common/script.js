@@ -13,3 +13,9 @@ export function showPopupMessage(success, text) {
     content.removeChild(popupDiv);
   }, 5000)
 }
+
+export function getUrlParam(param_name) {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  return urlParams.get(param_name)
+}
