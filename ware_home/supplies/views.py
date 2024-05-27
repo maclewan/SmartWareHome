@@ -1,6 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import TemplateView
 
+from ware_home.supplies.models import Product
+
 
 class ScannerPocView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
     template_name = "scanner/scanner.html"
@@ -21,6 +23,11 @@ class AddStockView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
 
     def test_func(self):
         return self.request.user.is_staff
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["products"] = Product.objects.all().order_by("name")
+        return context
 
 
 class PopStockView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):

@@ -10,20 +10,25 @@
 {% block content %}
 	{% load static %}
 
+	<script>
+	const CSRF_TOKEN = "{{ csrf_token }}"
+	</script>
+
 	<form id="main-form" class="container">
 		{% csrf_token %}
 
 		<div class="form-group">
 			<label for="search">Search:</label>
-			<input type="text" id="search" name="search" class="form-control" placeholder="Search for items...">
+			<input type="text" id="search-input" name="search" class="form-control" placeholder="Search for products...">
 		</div>
 
 		<div class="form-group">
 			<label for="items">Items:</label>
 			<select id="items" name="items">
 				<option value="">Select an item</option>
-				<option value="">todo 1</option>
-				<option value="">todo 2</option>
+				{% for product in products %}
+				<option class="product-item" value="{{ product.bar_code }}">{{ product.name }} ({{ product.bar_code }})</option>
+				{% endfor %}
 			</select>
 		</div>
 

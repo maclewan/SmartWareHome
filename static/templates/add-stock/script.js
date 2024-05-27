@@ -9,12 +9,27 @@ document.addEventListener("DOMContentLoaded", () => {
   handlePageLoaded();
 });
 document.getElementById("button-add").onclick = handleAdd
+document.getElementById("search-input").onkeyup = filterProducts
+document.getElementById("items").onchange = handleSelectChanged
 
 function handlePageLoaded() {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const bar_code = urlParams.get('bar_code')
   if (bar_code === null) return;
+
+  fetchAndFillProductData(bar_code)
+}
+
+function handleSelectChanged() {
+  const bar_code = document.getElementById("items").value
+  if (bar_code === "") {
+    return
+  }
+  fetchAndFillProductData(bar_code)
+}
+
+function fetchAndFillProductData(bar_code) {
   mainForm.elements["bar_code"].value = bar_code;
 
   fetch(`/api/supplies/product/${bar_code}/`)
@@ -22,13 +37,33 @@ function handlePageLoaded() {
       handleProductResponse(bar_code, response)
     })
     .catch(error => console.error('Error fetching items:', error));
+
 }
 
-function resetProductAddForm() {
-  mainForm.reset()
+function resetProductData() {
+  mainForm.elements["prod_name"].value = ""
+  mainForm.elements["volume"].value = ""
+  mainForm.elements["description"].value = ""
+  mainForm.elements["bar_code"].value = ""
+  mainForm.elements["amount"].value = ""
+  mainForm.elements["exp_date"].value = ""
+}
+
+function resetProductVariables() {
   productExists = false
   productOriginalData = {}
   productId = undefined
+}
+
+
+function resetProductAddForm() {
+  mainForm.reset()
+  resetProductVariables()
+}
+
+function softResetProductAddForm() {
+  resetProductData()
+  resetProductVariables()
 }
 
 function storeOriginalProductData(responseData) {
@@ -77,7 +112,7 @@ function getProductPayload() {
 function getRequestHeaders() {
   return {
     'Content-Type': 'application/json',
-    'X-CSRFToken': '{{ csrf_token }}'
+    'X-CSRFToken': CSRF_TOKEN
   }
 }
 
@@ -116,6 +151,32 @@ async function updateProduct() {
   return responseData.id
 }
 
+function filterProducts() {
+  const searchInput = document.getElementById('search-input').value.toLowerCase();
+  const products = document.querySelectorAll('.product-item');
+  let filteredCount = 0
+  let lastValue = ""
+
+  products.forEach(product => {
+    const productName = product.innerText;
+    if (productName.toLowerCase().includes(searchInput)) {
+      product.style.display = '';
+      filteredCount++
+      lastValue = product.value
+    } else {
+      product.style.display = 'none';
+    }
+  });
+
+  if (filteredCount === 1) {
+    document.getElementById("items").value = lastValue
+    fetchAndFillProductData(lastValue)
+  } else {
+    document.getElementById("items").value = ""
+    softResetProductAddForm()
+  }
+}
+
 async function handleAdd() {
   if (!mainForm.checkValidity()) {
     showPopupMessage("partial", "Fill out all fields...")
@@ -144,7 +205,7 @@ async function handleAdd() {
     method: "POST",
     headers: {
       'Content-Type': 'application/json',
-      'X-CSRFToken': '{{ csrf_token }}'
+      'X-CSRFToken': CSRF_TOKEN
     },
     body: JSON.stringify(payload)
   })
