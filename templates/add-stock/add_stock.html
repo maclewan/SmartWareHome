@@ -2,129 +2,13 @@
 
 
 {% block styles %}
-	<style>
-        label {
-            color: lightgray;
-            font-size: 2.5vh;
-            padding: 5px;
-        }
-
-        input, textarea, select {
-            padding: 5px;
-            width: 65vw;
-        }
-
-        button {
-            padding: 5px;
-            width: 25vw;
-        }
-
-        textarea {
-            height: 6.5vh;
-        }
-
-        .container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .horizontal-group {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .btn-success {
-            margin: 10px;
-            width: 35vw;
-            height: 10vw;
-        }
-
-        #amount {
-            width: 20vw;
-        }
-
-        #exp_date {
-            width: 40vw;
-        }
-
-        #bar_code {
-            width: 30vw;
-        }
-
-        #volume {
-            width: 30vw;
-        }
-
-        .form-control:invalid {
-            border: 2px dashed red;
-        }
-
-        .form-control:valid {
-            border: 2px solid black;
-        }
-
-        .popup-message {
-		{#display: none; /* Start with the message hidden */#} position: fixed;
-            bottom: 5px;
-            left: 5px;
-            right: 5px;
-            padding: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            z-index: 1000; /* Ensure it is on top of other elements */
-            text-align: center;
-        }
-
-        .green-popup-message {
-            background-color: #d4edda;
-            color: green;
-            border: 1px solid green;
-        }
-
-        .red-popup-message {
-            background-color: #edd4d4;
-            color: red;
-            border: 1px solid red;
-        }
-
-		.grey-popup-message {
-            background-color: #b2b2b2;
-            color: #494949;
-            border: 1px solid #494949;
-        }
-
-        .elementToFadeInAndOut {
-            animation: fadeinout 5s ease forwards;
-        }
-
-        @keyframes fadeinout {
-            0%, 100% {
-                opacity: 0;
-            }
-            20%, 80% {
-                opacity: 1;
-            }
-        }
-
-	</style>
+	{% load static %}
+	<link rel="stylesheet" type="text/css" href="{% static 'templates/add-stock/style.css' %}">
 {% endblock %}
 
 
 {% block content %}
+	{% load static %}
 
 	<form id="main-form" class="container">
 		{% csrf_token %}
@@ -183,8 +67,8 @@
 			</div>
 		</div>
 
-		<button type="button" id="button-add" class="btn-success" onclick="handleAdd();">Add</button>
+		<button type="button" id="button-add" class="btn-success">Add</button>
 	</form>
 
-	{% include 'add-stock/add_stock_js.html' %}
+	<script type="module" src="{% static 'templates/add-stock/script.js' %}"></script>
 {% endblock %}

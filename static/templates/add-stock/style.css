@@ -1,0 +1,76 @@
+@import url("../../common/style.css");
+
+label {
+    color: lightgray;
+    font-size: 2.5vh;
+    padding: 5px;
+}
+
+input, textarea, select {
+    padding: 5px;
+    width: 65vw;
+}
+
+button {
+    padding: 5px;
+    width: 25vw;
+}
+
+textarea {
+    height: 6.5vh;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.horizontal-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-success {
+    margin: 10px;
+    width: 35vw;
+    height: 10vw;
+}
+
+#amount {
+    width: 20vw;
+}
+
+#exp_date {
+    width: 40vw;
+}
+
+#bar_code {
+    width: 30vw;
+}
+
+#volume {
+    width: 30vw;
+}
+
+.form-control:invalid {
+    border: 2px dashed red;
+}
+
+.form-control:valid {
+    border: 2px solid black;
+}

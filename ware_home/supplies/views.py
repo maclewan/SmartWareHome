@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 
 
 class ScannerPocView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
-    template_name = "scanner/scanner_poc.html"
+    template_name = "scanner/scanner.html"
 
     def test_func(self):
         return self.request.user.is_staff

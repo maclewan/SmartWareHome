@@ -135,10 +135,9 @@ dmypy.json
 # custom
 /data/db
 /data/
-/static/
+
 /sources/
 
-/staticfiles/
 /sources/media
 /
 
