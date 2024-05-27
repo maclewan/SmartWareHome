@@ -1,0 +1,10 @@
+h1, p {
+    color: lightgray;
+}
+
+button {
+    height: 50px;
+    width: 200px;
+    background-color: lightgray;
+    font-size: 1.5vh;
+}

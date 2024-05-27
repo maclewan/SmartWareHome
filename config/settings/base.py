@@ -4,14 +4,11 @@ from decouple import config
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 
-SECRET_KEY = (
-    "django-insecure-0r1nb)b1$!t8xmwfqeaw#@z#h94aqet5ru=b5iwo)$&so7o(#e"
-)
+SECRET_KEY = "django-insecure-0r1nb)b1$!t8xmwfqeaw#@z#h94aqet5ru=b5iwo)$&so7o(#e"
 
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-
 
 # Application definition
 DJANGO_APPS = [
@@ -23,13 +20,15 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-THIRD_PARTY_APPS = ["django_extensions"]
+THIRD_PARTY_APPS = [
+    "django_extensions",
+    "rest_framework",
+]
 
 LOCAL_APPS = [
     "ware_home.users.apps.UsersConfig",
     "ware_home.supplies.apps.SuppliesConfig",
 ]
-
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -63,6 +62,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
 
 # Database
 DATABASES = {
@@ -91,19 +93,18 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "CET"
 
 USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
+STATICFILES_DIRS = (BASE_DIR / "static",)
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

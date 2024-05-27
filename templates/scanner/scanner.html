@@ -5,22 +5,15 @@
 {% endblock %}
 
 {% block styles %}
-	<style>
-		h1, p {
-			color: lightgray;
-		}
-		button {
-			height: 50px;
-			width: 200px;
-			background-color: lightgray;
-			font-size: 1.5vh;
-		}
-	</style>
+	{% load static %}
+	<link rel="stylesheet" type="text/css" href="{% static 'templates/scanner/style.css' %}">
 {% endblock %}
 
 {% block content %}
+	{% load static %}
+
 	<div style="width: 100%; display: flex; flex-direction: column; align-items: center">
-		<h1 >Scanner poc</h1>
+		<h1>Scanner poc</h1>
 		<div style="flex-direction: row; justify-content: center">
 			<button id="camera-auto-button">Auto camera</button>
 			<button id="camera-change-button">Force next camera</button>
@@ -31,9 +24,7 @@
 	</div>
 	<canvas id="canvas" style="display: none"></canvas>
 
-
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
-	{% include 'scanner/scanner_poc_js.html' %}
-
+	<script src="{% static 'templates/scanner/script.js' %}"></script>
 
 {% endblock %}
