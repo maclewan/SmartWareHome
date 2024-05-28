@@ -51,20 +51,9 @@ textarea {
     height: 10vw;
 }
 
-#amount {
+
+#pop-amount-input {
     width: 20vw;
-}
-
-#exp_date {
-    width: 40vw;
-}
-
-#bar_code {
-    width: 30vw;
-}
-
-#volume {
-    width: 30vw;
 }
 
 .supplies-table-wrapper {
@@ -96,7 +85,7 @@ textarea {
 }
 
 .col-id {
-    width: 10%;
+    width: 8%;
 }
 
 .col-prod-name {
@@ -108,15 +97,30 @@ textarea {
 }
 
 .col-exp-date {
-    width: 18%;
+    width: 20%;
 }
 
 .col-select-checkbox {
     width: 7%;
 }
+
 .supp-select-checkbox {
     text-align: center;
 }
+
 .supp-select-checkbox input {
     width: fit-content;
+}
+
+.incr-decr-btn {
+    width: 10vw;
+    height: 8vw;
+    font-size: 2vh;
+    text-align: center;
+}
+
+#pop-amount-input {
+    width: 7vw;
+    height: 4vw;
+    font-style: normal;
 }

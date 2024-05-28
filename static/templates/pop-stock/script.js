@@ -6,6 +6,12 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 document.getElementById("search-input").onkeyup = filterProducts
 document.getElementById("items").onchange = handleSelectChanged
+document.getElementById("btn-incr").onclick = () => {
+  handleIncrDecrClicked(true)
+}
+document.getElementById("btn-decr").onclick = () => {
+  handleIncrDecrClicked(false)
+}
 
 function handlePageLoaded() {
   const bar_code = getUrlParam('bar_code')
@@ -18,7 +24,6 @@ function handlePageLoaded() {
     .catch(error => console.error('Error fetching items:', error));
 }
 
-
 function handleCheckProductExistsResponse(bar_code, response) {
   let productExists = (response.status === 200)
   if (!productExists) {
@@ -28,8 +33,7 @@ function handleCheckProductExistsResponse(bar_code, response) {
   }
 }
 
-
-function filterProducts() {
+async function filterProducts() {
   const searchInput = document.getElementById('search-input').value.toLowerCase();
   const products = document.querySelectorAll('.product-item');
   let filteredCount = 0
@@ -46,17 +50,16 @@ function filterProducts() {
     }
   });
 
-  if (filteredCount === 1) {
-    document.getElementById("items").value = lastValue
-  } else {
-    document.getElementById("items").value = ""
-  }
+  document.getElementById("items").value = (filteredCount === 1) ? lastValue : ""
+  await handleSelectChanged()
 }
-
 
 async function handleSelectChanged() {
   const bar_code = document.getElementById("items").value
   if (bar_code === "") {
+    let tableTbody = document.getElementById("supplies-table-tbody")
+
+    clearTable(tableTbody)
     return
   }
   await fetchAndProcessSupplies(bar_code)
@@ -79,7 +82,6 @@ async function fetchAndProcessSupplies(bar_code) {
   let suppliesResponseData = await supplies_response.json()
 
   let tableTbody = document.getElementById("supplies-table-tbody")
-
   clearTable(tableTbody)
 
   // todo refactor
@@ -98,6 +100,7 @@ async function fetchAndProcessSupplies(bar_code) {
     tdId.className = "table-cell"
     tdName.className = "table-cell"
     tdAmount.className = "table-cell"
+    tdAmount.id = `supp-amount-${supply.id}`
     tdExpDate.className = "table-cell"
     tdSelect.className = "table-cell supp-select-checkbox"
 
@@ -109,6 +112,7 @@ async function fetchAndProcessSupplies(bar_code) {
     tdSelectInput.type = "radio"
     tdSelectInput.name = "selectSupply"
     tdSelectInput.value = supply.id
+    tdSelectInput.onclick = handleSupplySelectChanged
 
     tdSelect.appendChild(tdSelectInput)
     tr.appendChild(tdId)
@@ -124,6 +128,9 @@ async function fetchAndProcessSupplies(bar_code) {
 
 }
 
+function handleSupplySelectChanged() {
+  document.getElementById("pop-amount-input").value = "0.5"
+}
 
 function clearTable(tableTbody) {
   let tableRowsCount = tableTbody.getElementsByTagName('tr').length;
@@ -131,4 +138,20 @@ function clearTable(tableTbody) {
   for (let i = tableRowsCount - 1; i >= 0; i--) {
     tableTbody.deleteRow(i)
   }
+}
+
+function handleIncrDecrClicked(increment) {
+  const selectedInput = document.querySelector('input[name="selectSupply"]:checked')
+  if (selectedInput === null) {
+    return
+  }
+  const amount = document.getElementById(`supp-amount-${selectedInput.value}`).innerText
+
+  const input = document.getElementById("pop-amount-input")
+  const newValue = input.valueAsNumber + 0.5 * (increment ? 1 : -1)
+  if (newValue <= 0 || newValue > Number(amount)) {
+    return
+  }
+  input.value = newValue.toFixed(1)
+
 }

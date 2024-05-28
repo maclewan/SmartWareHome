@@ -73,7 +73,12 @@
 				</tbody>
 			</table>
 		</div>
-		<button type="button" id="button-add" class="btn-success">Todo?</button>
+		<div class="horizontal-group">
+			<button id="btn-decr" class="incr-decr-btn">-</button>
+			<input type="number" id="pop-amount-input" value="0.5">
+			<button id="btn-incr" class="incr-decr-btn">+</button>
+			<button type="button" id="button-add" class="btn-success">Pop</button>
+		</div>
 	</div>
 
 	<script type="module" src="{% static 'templates/pop-stock/script.js' %}"></script>
