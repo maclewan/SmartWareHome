@@ -4,7 +4,8 @@ from .api_views import (
     ProductCreateApiView,
     ProductDetailApiView,
     SupplyCreateApiView,
-    SupplyFilterApiView, SupplyPopApiView,
+    SupplyFilterApiView,
+    SupplyPopApiView,
 )
 
 urlpatterns = [

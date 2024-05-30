@@ -1,10 +1,14 @@
-from rest_framework import generics, views, status
+from rest_framework import generics, status, views
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from ware_home.supplies.models import Product, Supply
-from ware_home.supplies.serializers import ProductSerializer, SupplySerializer, SupplyPopSerializer
+from ware_home.supplies.serializers import (
+    ProductSerializer,
+    SupplyPopSerializer,
+    SupplySerializer,
+)
 
 
 class ProductDetailApiView(generics.RetrieveUpdateAPIView):
@@ -26,16 +30,17 @@ class SupplyCreateApiView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
 
-# todo TESTS
 class SupplyFilterApiView(generics.ListAPIView):
     serializer_class = SupplySerializer
     queryset = Supply.objects.all()
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return self.queryset.select_related("product").filter(
-            product__bar_code=self.kwargs["bar_code"]
-        ).order_by("expiration_date")
+        return (
+            self.queryset.select_related("product")
+            .filter(product__bar_code=self.kwargs["bar_code"])
+            .order_by("expiration_date")
+        )
 
 
 class SupplyPopApiView(views.APIView):
@@ -48,7 +53,9 @@ class SupplyPopApiView(views.APIView):
 
     def post(self, request, *args, **kwargs):
         instance = self.get_object()
-        serializer = self.serializer_class(data=request.data, context={"instance": instance})
+        serializer = self.serializer_class(
+            data=request.data, context={"instance": instance}
+        )
         serializer.is_valid(raise_exception=True)
 
         instance.amount -= serializer.validated_data["amount_to_pop"]
@@ -58,4 +65,6 @@ class SupplyPopApiView(views.APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         instance.save()
-        return Response(SupplySerializer(instance=instance).data, status=status.HTTP_200_OK)
+        return Response(
+            SupplySerializer(instance=instance).data, status=status.HTTP_200_OK
+        )
