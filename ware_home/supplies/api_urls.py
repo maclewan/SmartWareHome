@@ -4,7 +4,7 @@ from .api_views import (
     ProductCreateApiView,
     ProductDetailApiView,
     SupplyCreateApiView,
-    SupplyFilterApiView,
+    SupplyFilterApiView, SupplyPopApiView,
 )
 
 urlpatterns = [
@@ -27,5 +27,10 @@ urlpatterns = [
         "supply/for-product/<str:bar_code>/",
         SupplyFilterApiView.as_view(),
         name="supply-filter-list",
+    ),
+    path(
+        "supply/pop-amount/<int:id>/",
+        SupplyPopApiView.as_view(),
+        name="supply-pop-amount",
     ),
 ]
