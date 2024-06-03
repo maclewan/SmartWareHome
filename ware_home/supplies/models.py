@@ -1,4 +1,15 @@
 from django.db import models
+from django.db.models import (
+    Case,
+    DurationField,
+    ExpressionWrapper,
+    F,
+    IntegerField,
+    Value,
+    When,
+)
+from django.db.models.functions import Cast, ExtractDay, Now
+from django.utils import timezone
 
 from ware_home.common.models import TimeStampModel
 
@@ -24,10 +35,37 @@ class Product(models.Model):
         return f"Product #{self.id} {self.name}"
 
 
+class SupplyQuerySet(models.QuerySet):
+    def annotate_days_to_expiration(self):
+        return self.annotate(
+            days_to_expiration=Cast(
+                ExpressionWrapper(
+                    F("expiration_date") - timezone.now().date(),
+                    output_field=DurationField(),
+                )
+                / timezone.timedelta(days=1),
+                output_field=IntegerField(),
+            )
+        )
+
+    def annotate_expiration_state(self):
+        qs = self.annotate_days_to_expiration()
+        qs = qs.annotate(
+            expiration_state=Case(
+                When(days_to_expiration__lte=1, then=Value("expired")),
+                When(days_to_expiration__lte=15, then=Value("soon_to_expire")),
+                default=Value("good"),
+            )
+        )
+        return qs
+
+
 class Supply(TimeStampModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     amount = models.DecimalField(decimal_places=1, max_digits=5)
     expiration_date = models.DateField()
+
+    objects = SupplyQuerySet.as_manager()
 
     class Meta:
         verbose_name_plural = "supplies"

@@ -1,4 +1,4 @@
-import {showPopupMessage} from '../../common/script.js'
+import {getUrlParam, showPopupMessage} from '../../common/script.js'
 
 const mainForm = document.getElementById("main-form")
 let productExists = false
@@ -13,9 +13,7 @@ document.getElementById("search-input").onkeyup = filterProducts
 document.getElementById("items").onchange = handleSelectChanged
 
 function handlePageLoaded() {
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const bar_code = urlParams.get('bar_code')
+  const bar_code = getUrlParam('bar_code')
   if (bar_code === null) return;
 
   fetchAndFillProductData(bar_code)

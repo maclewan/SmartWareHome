@@ -1,3 +1,5 @@
+import {getUrlParam} from "../../common/script.js";
+
 let resultLog = document.getElementById("result-log");
 let deviceIds = [];
 let currentDeviceIndex = 0;
@@ -131,7 +133,15 @@ function handlePostDetections(detections) {
     return
   }
   resultLog.innerText = "Detected bar code: " + maxItem
-  window.location.href = `{% url 'stock-add' %}?bar_code=${maxItem}`;
+  redirectWithBarcode(maxItem)
+
+}
+
+function redirectWithBarcode(bar_code) {
+  const return_url = getUrlParam('return_url')
+  if (return_url === null) return;
+  window.location.href = `${return_url}?bar_code=${bar_code}`;
+
 }
 
 function restartCameraStream() {

@@ -2,7 +2,7 @@ import factory
 from factory import Faker, SubFactory
 from factory.django import DjangoModelFactory
 
-from ware_home.supplies.models import Category, Product
+from ware_home.supplies.models import Category, Product, Supply
 
 
 class CategoryFactory(DjangoModelFactory):
@@ -28,3 +28,12 @@ class ProductFactory(DjangoModelFactory):
             return
 
         self.categories.add(*extracted)
+
+
+class SupplyFactory(DjangoModelFactory):
+    class Meta:
+        model = Supply
+
+    product = SubFactory(ProductFactory)
+    amount = Faker("pyint", min_value=1, max_value=5)
+    expiration_date = Faker("date_this_month")
