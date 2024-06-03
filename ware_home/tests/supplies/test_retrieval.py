@@ -82,6 +82,7 @@ def test_filter_supply(admin_api_client):
             "id": supply_1.id,
             "product": product_1.id,
             "updated_at": AnyDateTime(),
+            "expiration_state": "expired",
         },
         {
             "amount": f"{supply_2.amount:.1f}",
@@ -90,6 +91,7 @@ def test_filter_supply(admin_api_client):
             "id": supply_2.id,
             "product": product_1.id,
             "updated_at": AnyDateTime(),
+            "expiration_state": "expired",
         },
     ]
 

@@ -70,6 +70,11 @@ async function handleSelectChanged() {
 function createSupplyRow(supply, productName, productVolume) {
   const tr = document.createElement("tr")
   tr.className = "supp-table-row"
+  if (supply.expiration_state === "expired") {
+    tr.classList.add("expired-row")
+  } else if (supply.expiration_state === "soon_to_expire") {
+    tr.classList.add("soon-to-expire-row")
+  }
   tr.id = `supp-table-row-${supply.id}`
 
   const tdId = document.createElement("td")

@@ -38,6 +38,7 @@ class SupplyFilterApiView(generics.ListAPIView):
     def get_queryset(self):
         return (
             self.queryset.select_related("product")
+            .annotate_expiration_state()
             .filter(product__bar_code=self.kwargs["bar_code"])
             .order_by("expiration_date")
         )

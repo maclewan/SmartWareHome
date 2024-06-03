@@ -124,3 +124,11 @@ textarea {
     height: 4vw;
     font-style: normal;
 }
+
+.expired-row {
+    background-color: rgb(115, 25, 25);
+}
+
+.soon-to-expire-row {
+    background-color: rgb(89, 67, 42);
+}

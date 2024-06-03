@@ -20,9 +20,19 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class SupplySerializer(serializers.ModelSerializer):
+    expiration_state = serializers.CharField(read_only=True)
+
     class Meta:
         model = Supply
-        fields = "__all__"
+        fields = [
+            "id",
+            "created_at",
+            "updated_at",
+            "amount",
+            "expiration_date",
+            "product",
+            "expiration_state",
+        ]
 
 
 class SupplyPopSerializer(serializers.Serializer):
