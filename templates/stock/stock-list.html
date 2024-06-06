@@ -1,1 +1,79 @@
 {% extends "base.html" %}
+
+
+{% block styles %}
+	{% load static %}
+	<link rel="stylesheet" type="text/css" href="{% static 'templates/stock/style.css' %}">
+{% endblock %}
+
+
+{% block content %}
+	{% load static %}
+
+	<script>
+      const productsJsonRawString = "{{ products_json }}"
+	</script>
+
+	<div id="main-container" class="container">
+
+		<div class="horizontal-label-group">
+			<label for="search-name">Name:</label>
+			<input type="text" id="search-name" name="name" class="form-control"
+				   placeholder="Search for products...">
+		</div>
+		<div class="horizontal-label-group">
+			<label for="category-select">Category:</label>
+			<select id="category-select" name="category">
+				<option value="">Select a category</option>
+				{% for category in categories %}
+					<option class="category-item" value="{{ category.id }}">{{ category.name }}
+					</option>
+				{% endfor %}
+			</select>
+		</div>
+
+		<button type="button" id="filter-button" class="btn btn-primary">Filter</button>
+
+		{#	Todo add reset button #}
+
+		<div class="product-table-wrapper">
+			<table id="product-table" class="product-table">
+				<colgroup>
+					<col class="col-id">
+					<col class="col-prod-name">
+					<col class="col-amount">
+					<col class="col-exp-date">
+					<col class="col-pop-btn">
+				</colgroup>
+				<thead>
+				<tr class="prod-table-row">
+					<th class="table-cell">Id</th>
+					<th class="table-cell">Product name</th>
+					<th class="table-cell">Pcs</th>
+					<th class="table-cell">Expires in</th>
+					<th class="table-cell">Pop</th>
+				</tr>
+				</thead>
+				<tbody id="product-table-tbody">
+
+				{% for product in products %}
+					<tr class="prod-table-row" style="" id="prod-row-{{ product.id }}"
+						data-categories="{{ product.categories.all|join:',' }}">
+						<td class="table-cell">{{ product.id }}</td>
+						<td class="table-cell">{{ product.name }} [{{ product.volume }}]</td>
+						<td class="table-cell">{{ product.supplies_sum }}</td>
+						<td class="table-cell">{{ product.days_to_closes_expiration_date }} days</td>
+						<td class="table-cell prod-pop-btn">
+{# Todo: redirect#}
+							<button>X</button>
+						</td>
+					</tr>
+				{% endfor %}
+
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<script type="module" src="{% static 'templates/stock/script.js' %}"></script>
+{% endblock %}

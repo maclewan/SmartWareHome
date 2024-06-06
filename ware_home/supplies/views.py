@@ -1,7 +1,13 @@
+import json
+
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.db.models import DurationField, ExpressionWrapper, F, IntegerField, Min, Sum
+from django.db.models.functions import Cast
+from django.utils import timezone
 from django.views.generic import TemplateView
 
-from ware_home.supplies.models import Product
+from ware_home.supplies.models import Category, Product
+from ware_home.supplies.serializers import ProductFilterViewSerializer
 
 
 class ScannerPocView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
@@ -47,3 +53,36 @@ class StockListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
 
     def test_func(self):
         return self.request.user.is_staff
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        products_qs = (
+            Product.objects.filter(supplies__isnull=False)
+            .distinct()
+            .prefetch_related("categories")
+        )
+
+        context["categories"] = Category.objects.all().order_by("name")
+        context["products"] = self._get_aggregated_products(products_qs)
+        context["products_json"] = json.dumps(
+            ProductFilterViewSerializer(products_qs, many=True).data
+        )
+        return context
+
+    def _get_aggregated_products(self, products_qs):
+        return (
+            products_qs.annotate_supplies_sum()
+            .annotate(closes_expiration_date=Min("supplies__expiration_date"))
+            .annotate(
+                days_to_closes_expiration_date=Cast(
+                    ExpressionWrapper(
+                        F("closes_expiration_date") - timezone.now().date(),
+                        output_field=DurationField(),
+                    )
+                    / timezone.timedelta(days=1),
+                    output_field=IntegerField(),
+                )
+            )
+            .order_by("days_to_closes_expiration_date")
+        )

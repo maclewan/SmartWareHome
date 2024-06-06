@@ -2,11 +2,11 @@
 
 label {
     color: lightgray;
-    font-size: 2.5vh;
+    font-size: 2vh;
     padding: 5px;
 }
 
-input, textarea, select {
+input, select {
     padding: 5px;
     width: 65vw;
 }
@@ -16,8 +16,8 @@ button {
     width: 25vw;
 }
 
-textarea {
-    height: 6.5vh;
+#filter-button {
+    margin-top: 5px;
 }
 
 .container {
@@ -30,30 +30,25 @@ textarea {
     gap: 10px;
 }
 
-.form-group {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.horizontal-group {
+.horizontal-label-group {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     gap: 10px;
+    width: 85vw;
 }
 
-.btn-success {
-    margin: 10px;
-    width: 35vw;
-    height: 10vw;
+.horizontal-label-group label {
+    width: 25%;
 }
 
+.horizontal-label-group input {
+    width: 55%;
+}
 
-#pop-amount-input {
-    width: 20vw;
+.horizontal-label-group select {
+    width: 58%;
 }
 
 .product-table-wrapper {
@@ -65,7 +60,6 @@ textarea {
 }
 
 .product-table {
-
     font-family: arial, sans-serif;
     font-size: 1.2vh;
     color: darkgray;
@@ -89,7 +83,7 @@ textarea {
 }
 
 .col-prod-name {
-    width: 50%;
+    width: 48%;
 }
 
 .col-amount {
@@ -100,16 +94,13 @@ textarea {
     width: 20%;
 }
 
-.col-select-checkbox {
-    width: 8%;
+.col-pop-btn {
+    width: 10%;
 }
 
-.supp-select-checkbox {
-    text-align: center;
-}
-
-.supp-select-checkbox input {
-    width: fit-content;
+.prod-pop-btn button {
+    width: 100%;
+    padding: 1px;
 }
 
 .incr-decr-btn {
@@ -117,12 +108,6 @@ textarea {
     height: 8vw;
     font-size: 2vh;
     text-align: center;
-}
-
-#pop-amount-input {
-    width: 7vw;
-    height: 4vw;
-    font-style: normal;
 }
 
 .expired-row {
