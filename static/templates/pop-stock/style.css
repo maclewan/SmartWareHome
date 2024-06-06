@@ -56,7 +56,7 @@ textarea {
     width: 20vw;
 }
 
-.product-table-wrapper {
+.supplies-table-wrapper {
     height: 38vh;
     margin: 1vh 0;
     border: solid darkgray 2px;
@@ -64,7 +64,7 @@ textarea {
     overflow-y: auto;
 }
 
-.product-table {
+.supplies-table {
 
     font-family: arial, sans-serif;
     font-size: 1.2vh;
@@ -74,7 +74,7 @@ textarea {
     width: 100%;
 }
 
-.prod-table-row {
+.supp-table-row {
     align-items: center;
     text-align: left;
 }

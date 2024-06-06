@@ -40,8 +40,8 @@
 				onclick="location.href='{% url 'scanner-poc' %}?return_url={{ request.path }}';">Scan
 		</button>
 
-		<div class="product-table-wrapper">
-			<table id="supplies-table" class="product-table">
+		<div class="supplies-table-wrapper">
+			<table id="supplies-table" class="supplies-table">
 				<colgroup>
 					<col class="col-id">
 					<col class="col-prod-name">
@@ -50,7 +50,7 @@
 					<col class="col-select-checkbox">
 				</colgroup>
 				<thead>
-				<tr class="prod-table-row">
+				<tr class="supp-table-row">
 					<th class="table-cell">Id</th>
 					<th class="table-cell">Product name</th>
 					<th class="table-cell">Pcs</th>
@@ -60,7 +60,7 @@
 				</thead>
 				<tbody id="supplies-table-tbody">
 
-				<tr class="prod-table-row expired-row" style="display: none">
+				<tr class="supp-table-row expired-row" style="display: none">
 					<td class="table-cell">1</td>
 					<td class="table-cell">Test prod name</td>
 					<td class="table-cell">5</td>
@@ -69,7 +69,7 @@
 						<input type="radio"/>
 					</td>
 				</tr>
-				<tr class="prod-table-row soon-to-expire-row" style="display: none">
+				<tr class="supp-table-row soon-to-expire-row" style="display: none">
 					<td class="table-cell">1</td>
 					<td class="table-cell">Test prod name</td>
 					<td class="table-cell">5</td>
@@ -78,7 +78,7 @@
 						<input type="radio"/>
 					</td>
 				</tr>
-				<tr class="prod-table-row" style="display: none">
+				<tr class="supp-table-row" style="display: none">
 					<td class="table-cell">1</td>
 					<td class="table-cell">Test prod name</td>
 					<td class="table-cell">5</td>
