@@ -5,6 +5,7 @@ from django.db.models import (
     ExpressionWrapper,
     F,
     IntegerField,
+    Sum,
     Value,
     When,
 )
@@ -24,12 +25,19 @@ class Category(models.Model):
         return f"Category #{self.id} {self.name}"
 
 
+class ProductQuerySet(models.QuerySet):
+    def annotate_supplies_sum(self):
+        return self.annotate(supplies_sum=Sum("supplies__amount"))
+
+
 class Product(models.Model):
     name = models.CharField(max_length=255)
     bar_code = models.CharField(max_length=63, unique=True)
     description = models.TextField()
     volume = models.CharField(max_length=127, null=True, blank=True)
     categories = models.ManyToManyField(Category)
+
+    objects = ProductQuerySet.as_manager()
 
     def __str__(self):
         return f"Product #{self.id} {self.name}"
@@ -61,7 +69,9 @@ class SupplyQuerySet(models.QuerySet):
 
 
 class Supply(TimeStampModel):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name="supplies"
+    )
     amount = models.DecimalField(decimal_places=1, max_digits=5)
     expiration_date = models.DateField()
 
