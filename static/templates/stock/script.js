@@ -2,12 +2,19 @@ document.addEventListener("DOMContentLoaded", () => {
   handlePageLoaded();
 });
 document.getElementById("filter-button").onclick = filterProducts
+document.getElementById("reset-button").onclick = resetProducts
 
 let products = []
 
 function handlePageLoaded() {
   let productsJsonString = productsJsonRawString.replaceAll("&quot;", "\"")
   products = JSON.parse(productsJsonString)
+}
+
+async function resetProducts() {
+  document.getElementById('search-name').value = "";
+  document.getElementById('category-select').value = "";
+  await filterProducts()
 }
 
 async function filterProducts() {
