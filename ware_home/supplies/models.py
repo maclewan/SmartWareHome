@@ -9,7 +9,7 @@ from django.db.models import (
     Value,
     When,
 )
-from django.db.models.functions import Cast, ExtractDay, Now
+from django.db.models.functions import Cast
 from django.utils import timezone
 
 from ware_home.common.models import TimeStampModel

@@ -57,15 +57,17 @@
 				<tbody id="product-table-tbody">
 
 				{% for product in products %}
-					<tr class="prod-table-row" style="" id="prod-row-{{ product.id }}"
+					<tr class="prod-table-row {{ product.expiration_row_class_name }}" id="prod-row-{{ product.id }}"
 						data-categories="{{ product.categories.all|join:',' }}">
 						<td class="table-cell">{{ product.id }}</td>
 						<td class="table-cell">{{ product.name }} [{{ product.volume }}]</td>
 						<td class="table-cell">{{ product.supplies_sum }}</td>
 						<td class="table-cell">{{ product.days_to_closes_expiration_date }} days</td>
 						<td class="table-cell prod-pop-btn">
-							{# Todo: redirect#}
-							<button>X</button>
+							<button
+								onclick="window.location.href='{% url 'stock-pop' %}?bar_code={{ product.bar_code }}';">
+								X
+							</button>
 						</td>
 					</tr>
 				{% endfor %}

@@ -1,5 +1,3 @@
-from abc import ABC
-
 from rest_framework import serializers
 
 from ware_home.supplies.models import Category, Product, Supply

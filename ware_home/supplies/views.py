@@ -1,7 +1,16 @@
 import json
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.db.models import DurationField, ExpressionWrapper, F, IntegerField, Min, Sum
+from django.db.models import (
+    Case,
+    DurationField,
+    ExpressionWrapper,
+    F,
+    IntegerField,
+    Min,
+    Value,
+    When,
+)
 from django.db.models.functions import Cast
 from django.utils import timezone
 from django.views.generic import TemplateView
@@ -82,6 +91,18 @@ class StockListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
                     )
                     / timezone.timedelta(days=1),
                     output_field=IntegerField(),
+                )
+            )
+            .annotate(
+                expiration_row_class_name=Case(
+                    When(
+                        days_to_closes_expiration_date__lte=1, then=Value("expired-row")
+                    ),
+                    When(
+                        days_to_closes_expiration_date__lte=15,
+                        then=Value("soon-to-expire-row"),
+                    ),
+                    default=Value(""),
                 )
             )
             .order_by("days_to_closes_expiration_date")
