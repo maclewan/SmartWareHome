@@ -1,5 +1,3 @@
-from abc import ABC
-
 from rest_framework import serializers
 
 from ware_home.supplies.models import Category, Product, Supply
@@ -52,3 +50,9 @@ class SupplyPopSerializer(serializers.Serializer):
                 {"amount_to_pop": "Cannot pop more amount that in stock."}
             )
         return attrs
+
+
+class ProductFilterViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = "__all__"

@@ -21,6 +21,7 @@ function handlePageLoaded() {
   fetch(`/api/supplies/product/${bar_code}/`)
     .then(response => {
       handleCheckProductExistsResponse(bar_code, response)
+      refreshSearchResults().then(() => {})
     })
     .catch(error => console.error('Error fetching items:', error));
 }
