@@ -1,8 +1,38 @@
+* {
+    all: unset;
+    display: revert;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+input[type="radio" i] {
+    background-color: initial;
+    cursor: default;
+    appearance: auto;
+    box-sizing: border-box;
+    margin: 3px 3px 0 5px;
+    padding: initial;
+    border: initial;
+}
+
+/* Base core components styles */
+input, textarea, select, button {
+    background-color: white;
+    border-radius: 5px;
+}
+
+button {
+    text-align: center;
+}
+
+
 body {
     background-color: rgb(38, 36, 38);
     margin: 0;
 }
 
+/* Top bar + content + footer styles */
 #top-bar, #footer {
     display: flex;
     flex-direction: row;
@@ -21,4 +51,5 @@ body {
     font-size: 2vh;
     border-radius: 1vh;
     background-color: lightgray;
+    padding: 0;
 }

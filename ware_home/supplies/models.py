@@ -82,3 +82,10 @@ class Supply(TimeStampModel):
 
     def __str__(self):
         return f"Supply #{self.id} {self.product.name}"
+
+
+class DemandTag(models.Model):
+    product = models.OneToOneField(
+        Product, on_delete=models.CASCADE, related_name="demand_tag"
+    )
+    amount = models.DecimalField(decimal_places=1, max_digits=5)

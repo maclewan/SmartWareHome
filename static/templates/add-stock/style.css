@@ -2,32 +2,34 @@
 
 label {
     color: lightgray;
-    font-size: 2.5vh;
+    font-size: 2.25vh;
     padding: 5px;
 }
 
 input, textarea, select {
-    padding: 5px;
+    padding: 10px;
     width: 65vw;
+    font-size: 1.75vh;
 }
 
 button {
     padding: 5px;
-    width: 25vw;
+    width: 30vw;
+    height: 10vw;
 }
 
 textarea {
-    height: 6.5vh;
+    height: 4vh;
 }
 
 .container {
     width: 100%;
-    height: 100%;
+    height: 90%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 7px;
 }
 
 .form-group {
@@ -47,8 +49,8 @@ textarea {
 
 .btn-success {
     margin: 10px;
-    width: 35vw;
-    height: 10vw;
+    width: 45vw;
+    height: 15vw;
 }
 
 #amount {
@@ -57,6 +59,7 @@ textarea {
 
 #exp_date {
     width: 40vw;
+    height: 2vh;
 }
 
 #bar_code {
