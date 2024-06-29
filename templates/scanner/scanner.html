@@ -13,14 +13,14 @@
 	{% load static %}
 
 	<div style="width: 100%; display: flex; flex-direction: column; align-items: center">
-		<h1>Scanner poc</h1>
+		<h1>Scanner</h1>
 		<div style="flex-direction: row; justify-content: center">
-			<button id="camera-auto-button">Auto camera</button>
-			<button id="camera-change-button">Force next camera</button>
+			<button class="camera-management-button" id="camera-auto-button">Auto camera</button>
+			<button class="camera-management-button" id="camera-change-button">Force next camera</button>
 		</div>
 		<p id="result-log" style="height: 30px">Here will be result</p>
 		<video id="video" width="440" height="330" class="video-background" autoplay loop muted playsinline></video>
-		<button id="scan-button" style="height: 70px; width: 250px; margin-top: 20px">Scan</button>
+		<button id="scan-button">Scan</button>
 	</div>
 	<canvas id="canvas" style="display: none"></canvas>
 

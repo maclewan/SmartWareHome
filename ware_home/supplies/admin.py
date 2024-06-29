@@ -1,12 +1,15 @@
 from django.contrib import admin
-from django.utils import timezone
 
 from ..common.admin import AutoFilterHorizontalMixin
 from ..common.utils import check_expiration_date, get_expiration_days
-from .models import Category, Product, Supply
+from .models import Category, DemandTag, Product, Supply
 
 
 class CategoryAdmin(admin.ModelAdmin):
+    pass
+
+
+class DemandTagAdmin(admin.ModelAdmin):
     pass
 
 
@@ -45,3 +48,4 @@ class SupplyAdmin(admin.ModelAdmin):
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Supply, SupplyAdmin)
+admin.site.register(DemandTag, DemandTagAdmin)

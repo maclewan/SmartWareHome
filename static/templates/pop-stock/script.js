@@ -146,7 +146,7 @@ async function fetchAndProcessSupplies(bar_code) {
 }
 
 function handleSupplySelectChanged() {
-  document.getElementById("pop-amount-input").value = "0.5"
+  document.getElementById("pop-amount-input").value = "1.0"
 }
 
 function clearTable(tableTbody) {

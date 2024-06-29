@@ -51,11 +51,6 @@ textarea {
     height: 10vw;
 }
 
-
-#pop-amount-input {
-    width: 20vw;
-}
-
 .supplies-table-wrapper {
     height: 38vh;
     margin: 1vh 0;
@@ -120,7 +115,7 @@ textarea {
 
 #pop-amount-input {
     width: 7vw;
-    height: 4vw;
+    height: 6vw;
     font-style: normal;
 }
 

@@ -17,14 +17,19 @@ Including another URLconf
 
 from django.conf import settings
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, reverse, reverse_lazy
+from django.views.generic import RedirectView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("supplies/", include("ware_home.supplies.urls")),
     path("api/supplies/", include("ware_home.supplies.api_urls")),
+    path(
+        "",
+        RedirectView.as_view(url=reverse_lazy("dispatch")),
+        name="home-view-redirect",
+    ),
 ]
-
 
 if settings.DEBUG:
     from django.conf.urls.static import static
