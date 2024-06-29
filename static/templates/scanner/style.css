@@ -19,5 +19,7 @@ h1, p {
 }
 
 #video {
-    width: 95vw;
+    height: 50vh;
+    width: 98vw;
+    object-fit: contain;
 }
