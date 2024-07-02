@@ -17,10 +17,11 @@ Including another URLconf
 
 from django.conf import settings
 from django.contrib import admin
-from django.urls import include, path, reverse, reverse_lazy
+from django.urls import include, path, reverse_lazy
 from django.views.generic import RedirectView
 
 urlpatterns = [
+    path('', include('pwa.urls')),
     path("admin/", admin.site.urls),
     path("supplies/", include("ware_home.supplies.urls")),
     path("api/supplies/", include("ware_home.supplies.api_urls")),

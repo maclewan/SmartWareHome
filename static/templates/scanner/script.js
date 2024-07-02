@@ -7,6 +7,7 @@ let currentDeviceIndex = 0;
 function forceRequestPermissions() {
   navigator.permissions.query({name: 'camera'})
     .then((permissionObj) => {
+      console.log(permissionObj)
       if (permissionObj.state === "prompt") {
         setTimeout(forceRequestPermissions, 1000);
       } else if (permissionObj.state === "granted") {

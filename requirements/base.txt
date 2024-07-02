@@ -4,6 +4,7 @@ djangorestframework==3.15.1
 django-allauth==0.62.1
 django-storages==1.14.3
 django-crontab==0.7.1
+django-pwa
 
 djangorestframework
 drf-spectacular
