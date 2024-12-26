@@ -14,3 +14,4 @@ python-decouple==3.8
 user-agents==2.2.0
 
 qrcode[pil]
+phomemo_printer==1.0.5
