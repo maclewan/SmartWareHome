@@ -102,6 +102,10 @@ function createSupplyRow(supply, productName, productVolume, supply_id) {
   tdSelectInput.value = supply.id
   tdSelectInput.onclick = handleSupplySelectChanged
 
+  console.log(supply_id)
+  console.log(supply.id)
+  console.log(supply_id === supply.id.toString())
+  console.log("***")
   if (supply_id === supply.id.toString()) {
       tdSelectInput.checked = true
   }
