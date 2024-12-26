@@ -68,7 +68,7 @@ async function handleSelectChanged() {
 }
 
 
-function createSupplyRow(supply, productName, productVolume) {
+function createSupplyRow(supply, productName, productVolume, supply_id) {
   const tr = document.createElement("tr")
   tr.className = "supp-table-row"
   if (supply.expiration_state === "expired") {
@@ -102,6 +102,10 @@ function createSupplyRow(supply, productName, productVolume) {
   tdSelectInput.value = supply.id
   tdSelectInput.onclick = handleSupplySelectChanged
 
+  if (supply_id === supply.id.toString()) {
+      tdSelectInput.checked = true
+  }
+
   tdSelect.appendChild(tdSelectInput)
   tr.appendChild(tdId)
   tr.appendChild(tdName)
@@ -133,8 +137,10 @@ async function fetchAndProcessSupplies(bar_code) {
 
   clearTable(tableTbody)
 
+  const supply_id = getUrlParam('supply_id')
+
   suppliesResponseData.forEach((supply) => {
-    const tr = createSupplyRow(supply, productResponseData.name, productResponseData.volume)
+    const tr = createSupplyRow(supply, productResponseData.name, productResponseData.volume, supply_id)
     tableTbody.appendChild(tr)
   })
 
