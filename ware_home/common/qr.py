@@ -1,5 +1,3 @@
-from urllib.parse import urlencode
-
 import qrcode
 from django.conf import settings
 from django.urls import reverse
@@ -9,6 +7,7 @@ from qrcode.image.pil import PilImage
 
 
 def _generate_qr(content: str, description: tuple[str, str]) -> Image:
+    font_path = settings.QR_FONT_PATH
     target_dimensions = (settings.TARGET_QR_WIDTH, settings.TARGET_QR_WIDTH)
     qr = QRCode(
         version=1,
@@ -34,13 +33,13 @@ def _generate_qr(content: str, description: tuple[str, str]) -> Image:
     descr_line_1, descr_line_2 = description
 
     # Line 1
-    font = ImageFont.load_default(size=30)
+    font = ImageFont.truetype(font_path, size=30)
     bbox = draw.textbbox((0, 0), descr_line_1, font=font)
     text_width = bbox[2] - bbox[0]
     text_height = bbox[3] - bbox[1]
 
     text_x = (width - text_width) // 2
-    text_y = height - text_height + 15
+    text_y = height - text_height + 25
 
     draw.text((text_x, text_y), descr_line_1, fill="black", font=font)
 
@@ -48,13 +47,13 @@ def _generate_qr(content: str, description: tuple[str, str]) -> Image:
     if len(descr_line_2) > 27:
         descr_line_2 = descr_line_2[:25] + "..."
 
-    font = ImageFont.load_default(size=25)
+    font = ImageFont.truetype(font_path, size=25)
     bbox = draw.textbbox((0, 0), descr_line_2, font=font)
     text_width = bbox[2] - bbox[0]
     text_height = bbox[3] - bbox[1]
 
     text_x = (width - text_width) // 2
-    text_y = height - text_height + 45
+    text_y = height - text_height + 50
 
     draw.text((text_x, text_y), descr_line_2, fill="black", font=font)
 

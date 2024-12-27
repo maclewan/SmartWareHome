@@ -16,4 +16,4 @@ COPY ware_home /backend_app
 COPY cert.crt /backend_app
 COPY cert.key /backend_app
 COPY pytest.ini /backend_app
-
+COPY test_print.py /backend_app
