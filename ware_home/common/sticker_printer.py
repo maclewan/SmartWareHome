@@ -30,7 +30,7 @@ class PhomemoT02Printer(Printer):
             image = image.transpose(Image.ROTATE_90)
 
         # width 384 dots
-        IMAGE_WIDTH_BYTES = 50  # t-02
+        IMAGE_WIDTH_BYTES = 45  # t-02
         IMAGE_WIDTH_BITS = IMAGE_WIDTH_BYTES * 8
         image = image.resize(
             size=(IMAGE_WIDTH_BITS, int(image.height * IMAGE_WIDTH_BITS / image.width))

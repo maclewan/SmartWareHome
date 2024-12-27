@@ -13,7 +13,7 @@ def _generate_qr(content: str, description: str) -> Image:
     qr = QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
-        box_size=10,
+        box_size=20,
         border=2,
     )
     qr.add_data(content)
@@ -30,16 +30,17 @@ def _generate_qr(content: str, description: str) -> Image:
     new_image.paste(image, (0, 0))
 
     draw = ImageDraw.Draw(new_image)
-    font = ImageFont.load_default(size=20)
+    font = ImageFont.load_default(size=22)
 
-    # Todo: strip description to 29 chars max
+    if len(description) > 29:
+        description = description[:27] + "..."
 
     bbox = draw.textbbox((0, 0), description, font=font)
     text_width = bbox[2] - bbox[0]
     text_height = bbox[3] - bbox[1]
 
     text_x = (width - text_width) // 2
-    text_y = height - text_height
+    text_y = height - text_height + 5
 
     draw.text((text_x, text_y), description, fill="black", font=font)
 
