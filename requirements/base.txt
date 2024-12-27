@@ -15,3 +15,4 @@ user-agents==2.2.0
 
 qrcode[pil]
 phomemo_printer==1.0.5
+django-no-queryset-admin-actions

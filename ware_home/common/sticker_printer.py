@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.conf import settings
 from phomemo_printer.ESCPOS_constants import *
 from phomemo_printer.ESCPOS_printer import Printer
@@ -98,7 +100,7 @@ def _get_printer_instance() -> PhomemoT02Printer:
     return printer
 
 
-def _concat_images_into_two_rows(image_list: list[Image]) -> Image:
+def _concat_images_into_two_rows(image_list: list[Image]) -> Optional[Image]:
     img_height = settings.TARGET_QR_WIDTH + settings.QR_DESCR_HEIGHT
     img_width = settings.TARGET_QR_WIDTH
     column_gap = settings.COLUMN_GAP
@@ -124,10 +126,14 @@ def _concat_images_into_two_rows(image_list: list[Image]) -> Image:
     return final_image
 
 
-def batch_print_qr(image_list: list[Image]):
+def batch_print_qr(images_list: list[Image]) -> bool:
     """
-    :param image_list: List of images, all TARGET_QR_WIDTH px wide
+    :param images_list: List of images, all TARGET_QR_WIDTH px wide
+    :returs True if printed, False if image was empty
     """
-    concatenated_image = _concat_images_into_two_rows(image_list)
+    concatenated_image = _concat_images_into_two_rows(images_list)
+    if concatenated_image is None:
+        return False
     printer = _get_printer_instance()
     printer.print_image(image=concatenated_image)
+    return True

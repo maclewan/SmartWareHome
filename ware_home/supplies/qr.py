@@ -1,7 +1,7 @@
 from PIL import Image
 
 from ware_home.common.qr import generate_qr_from_details
-from ware_home.supplies.models import Supply
+from ware_home.supplies.models import Supply, SupplyQuerySet
 
 
 def _generate_qr_for_supply(supply: Supply) -> Image:
@@ -12,7 +12,6 @@ def _generate_qr_for_supply(supply: Supply) -> Image:
     return generate_qr_from_details(bar_code, supply_id, description)
 
 
-def bulk_generate_qrs_for_supplies(supply_id_list: list[int]) -> list[Image]:
-    qs = Supply.objects.select_related("product").filter(id__in=supply_id_list)
-    images_list = [_generate_qr_for_supply(supply) for supply in qs]
+def bulk_generate_qrs_for_supplies(supplies_qs: SupplyQuerySet) -> list[Image]:
+    images_list = [_generate_qr_for_supply(supply) for supply in supplies_qs]
     return images_list

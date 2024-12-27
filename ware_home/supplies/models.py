@@ -67,6 +67,17 @@ class SupplyQuerySet(models.QuerySet):
         )
         return qs
 
+    def schedule_for_print(self):
+        self.update(scheduled_print=True)
+        return self
+
+    def scheduled_for_print(self):
+        return self.filter(scheduled_print=True).select_related("product")
+
+    def mark_as_printed(self):
+        self.update(scheduled_print=False, printed_once=True)
+        return self
+
 
 class Supply(TimeStampModel):
     product = models.ForeignKey(

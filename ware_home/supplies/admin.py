@@ -1,8 +1,11 @@
-from django.contrib import admin
+from django.contrib import admin, messages
+from django_no_queryset_admin_actions import NoQuerySetAdminActionsMixin
 
 from ..common.admin import AutoFilterHorizontalMixin
+from ..common.sticker_printer import batch_print_qr
 from ..common.utils import check_expiration_date, get_expiration_days
 from .models import Category, DemandTag, Product, Supply
+from .qr import bulk_generate_qrs_for_supplies
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -22,13 +25,15 @@ class ProductAdmin(AutoFilterHorizontalMixin, admin.ModelAdmin):
     get_categories.short_description = "Categories"
 
 
-class SupplyAdmin(admin.ModelAdmin):
+class SupplyAdmin(NoQuerySetAdminActionsMixin, admin.ModelAdmin):
     list_display = [
         "__str__",
         "amount",
         "expiration_date",
         "get_expiration_days",
         "get_expired",
+        "scheduled_print",
+        "printed_once",
     ]
 
     readonly_fields = ["created_at", "updated_at"]
@@ -43,6 +48,28 @@ class SupplyAdmin(admin.ModelAdmin):
         return get_expiration_days(obj)
 
     get_expiration_days.short_description = "Days left"
+
+    @admin.action(description="Mark selected supplies to schedule for print")
+    def schedule_for_print(self, request, queryset):
+        queryset.schedule_for_print()
+
+    @admin.action(description="Print qr-codes batch")
+    def perform_print(self, request):
+        qs = Supply.objects.scheduled_for_print()
+        try:
+            images_list = bulk_generate_qrs_for_supplies(qs)
+            result = batch_print_qr(images_list)
+            qs.mark_as_printed()
+
+            if result:
+                messages.add_message(request, messages.INFO, "Printed successfully!")
+            else:
+                messages.add_message(request, messages.WARNING, "Nothing to print!")
+        except Exception as e:
+            messages.add_message(request, messages.ERROR, f"Printing error! '{e}'")
+
+    actions = ["schedule_for_print", "perform_print"]
+    no_queryset_actions = ["perform_print"]
 
 
 admin.site.register(Category, CategoryAdmin)

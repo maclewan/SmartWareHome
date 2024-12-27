@@ -23,6 +23,7 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "django_extensions",
     "rest_framework",
+    "django_no_queryset_admin_actions",
 ]
 
 LOCAL_APPS = [

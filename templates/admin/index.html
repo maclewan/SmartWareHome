@@ -1,0 +1,23 @@
+{% extends "admin/index.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block content_title %}
+  <div class="d-flex justify-content-space-between align-items-center">
+    {% if title %}
+      <h1>{{ title }}</h1>
+    {% endif %}
+
+  <div style="margin-bottom: 20px; padding: 0 10px 0 0; display: flex; gap: 10px">
+    <a href="{% url 'dispatch' %}" class="historylink">
+        <input style="padding: 7px 10px" type="submit" value="Dispatch" class="button" />
+    </a>
+	<a href="{% url 'admin:supplies_supply_changelist' %}" class="historylink">
+        <input style="padding: 7px 10px" type="submit" value="Supply admin" class="button" />
+    </a>
+  </div>
+
+    <hr>
+
+  </div>
+{% endblock %}
