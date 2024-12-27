@@ -68,7 +68,7 @@ async function handleSelectChanged() {
 }
 
 
-function createSupplyRow(supply, productName, productVolume, supply_id) {
+function createSupplyRow(supply, productName, productVolume) {
   const tr = document.createElement("tr")
   tr.className = "supp-table-row"
   if (supply.expiration_state === "expired") {
@@ -101,10 +101,6 @@ function createSupplyRow(supply, productName, productVolume, supply_id) {
   tdSelectInput.name = "selectSupply"
   tdSelectInput.value = supply.id
   tdSelectInput.onclick = handleSupplySelectChanged
-
-  if (supply_id === supply.id.toString()) {
-      tdSelectInput.click()
-  }
 
   tdSelect.appendChild(tdSelectInput)
   tr.appendChild(tdId)
@@ -140,15 +136,21 @@ async function fetchAndProcessSupplies(bar_code) {
   const supply_id = getUrlParam('supply_id')
 
   suppliesResponseData.forEach((supply) => {
-    const tr = createSupplyRow(supply, productResponseData.name, productResponseData.volume, supply_id)
+    const tr = createSupplyRow(supply, productResponseData.name, productResponseData.volume)
     tableTbody.appendChild(tr)
   })
 
-  if (suppliesResponseData.length !== 1) {
-    return
+  if (suppliesResponseData.length === 1) {
+    const input = tableTbody.querySelector("tr").querySelector("input")
+    input.checked = true
   }
-  const input = tableTbody.querySelector("tr").querySelector("input")
-  input.checked = true
+  else if (supply_id !== null) {
+    const row = document.getElementById(`supp-table-row-${supply_id}`)
+    if (row !== null) {
+      const input = row.querySelector("input")
+      input.checked = true
+    }
+  }
 }
 
 function handleSupplySelectChanged() {
