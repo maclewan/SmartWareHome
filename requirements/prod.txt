@@ -1,4 +1,1 @@
 -r base.txt
-
-gunicorn
-django-crontab
