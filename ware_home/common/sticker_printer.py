@@ -87,7 +87,7 @@ class PhomemoT02Printer(Printer):
                 self._print_bytes(l)
 
         self._print_bytes(PRINT_FEED)
-        # self._print_bytes(PRINT_FEED)
+        self._print_bytes(PRINT_FEED)
         self._print_bytes(FOOTER)
 
 
