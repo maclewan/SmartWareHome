@@ -47,12 +47,11 @@ def _generate_qr(content: str, description: str) -> Image:
 
 
 def _generate_pop_stock_url(bar_code: str, supply_id: str) -> str:
-    query_args = {
-        "bar_code": bar_code,
-        "supply_id": supply_id,
-    }
-    query_args_encoded = urlencode(query_args, True)
-    qr_url = settings.BASE_DOMAIN + reverse("stock-pop") + "?" + query_args_encoded
+    # Short params name to create as compact qr as possible
+    qr_url = settings.BASE_DOMAIN + reverse("qr-redirect", kwargs={
+            "bar_code": bar_code,
+            "supply_id": supply_id,
+        })
     return qr_url
 
 

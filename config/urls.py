@@ -20,10 +20,17 @@ from django.contrib import admin
 from django.urls import include, path, reverse, reverse_lazy
 from django.views.generic import RedirectView
 
+from ware_home.common.views import QrCodeRedirectView
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("supplies/", include("ware_home.supplies.urls")),
     path("api/supplies/", include("ware_home.supplies.api_urls")),
+    path(
+        "qr/<str:bar_code>/<str:supply_id>/",
+        QrCodeRedirectView.as_view(url=reverse_lazy("stock-pop")),
+        name="qr-redirect",
+    ),
     path(
         "",
         RedirectView.as_view(url=reverse_lazy("dispatch")),
