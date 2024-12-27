@@ -1,7 +1,7 @@
 services:
   django:
     environment:
-      BASE_DOMAIN: "supplies.wikamaciek.pl"
+      BASE_DOMAIN: "qr.wikamaciek.pl"
     build: .
     network_mode: "host"
     restart: always

@@ -30,7 +30,7 @@ class PhomemoT02Printer(Printer):
             image = image.transpose(Image.ROTATE_90)
 
         # width 384 dots
-        IMAGE_WIDTH_BYTES = 45  # t-02
+        IMAGE_WIDTH_BYTES = 46  # t-02
         IMAGE_WIDTH_BITS = IMAGE_WIDTH_BYTES * 8
         image = image.resize(
             size=(IMAGE_WIDTH_BITS, int(image.height * IMAGE_WIDTH_BITS / image.width))
@@ -101,6 +101,7 @@ def _get_printer_instance() -> PhomemoT02Printer:
 def _concat_images_into_two_rows(image_list: list[Image]) -> Image:
     img_height = settings.TARGET_QR_WIDTH + settings.QR_DESCR_HEIGHT
     img_width = settings.TARGET_QR_WIDTH
+    column_gap = settings.COLUMN_GAP
 
     if len(image_list) == 0:
         return
@@ -111,12 +112,12 @@ def _concat_images_into_two_rows(image_list: list[Image]) -> Image:
 
     rows = len(image_list) / 2
 
-    final_width = int(2 * img_width)
+    final_width = int(2 * img_width) + column_gap
     final_height = int(rows * img_height)
     final_image = Image.new("RGB", (final_width, final_height), color=(255, 255, 255))
 
     for idx, img in enumerate(image_list):
-        x = (idx % 2) * img_width
+        x = (idx % 2) * (img_width + column_gap)
         y = (idx // 2) * img_height
         final_image.paste(img, (x, y))
 
