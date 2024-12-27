@@ -1,7 +1,7 @@
 services:
   django:
     environment:
-      BASE_DOMAIN: "https://supplies.wikamaciek.pl"
+      BASE_DOMAIN: "supplies.wikamaciek.pl"
     build: .
     restart: always
     command: bash -c "python manage.py migrate && python manage.py runserver_plus 0.0.0.0:33003 --cert-file ssl-certs/cert.pem"

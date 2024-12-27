@@ -103,7 +103,7 @@ function createSupplyRow(supply, productName, productVolume, supply_id) {
   tdSelectInput.onclick = handleSupplySelectChanged
 
   if (supply_id === supply.id.toString()) {
-      tdSelectInput.checked = true
+      tdSelectInput.click()
   }
 
   tdSelect.appendChild(tdSelectInput)
