@@ -149,6 +149,7 @@ async function fetchAndProcessSupplies(bar_code) {
     if (row !== null) {
       const input = row.querySelector("input")
       input.checked = true
+      showPopupMessage("yes", "Picked!")
     }
   }
 }
