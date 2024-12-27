@@ -58,24 +58,23 @@ def _generate_qr(content: str, description: tuple[str, str]) -> Image:
 
     draw.text((text_x, text_y), descr_line_2, fill="black", font=font)
 
-
-
-
-
-
-
     return new_image
 
 
 def _generate_pop_stock_url(bar_code: str, supply_id: str) -> str:
     # Short params name to create as compact qr as possible
-    qr_url = settings.BASE_DOMAIN + reverse("qr-redirect", kwargs={
+    qr_url = settings.BASE_DOMAIN + reverse(
+        "qr-redirect",
+        kwargs={
             "bar_code": bar_code,
             "supply_id": supply_id,
-        })
+        },
+    )
     return qr_url
 
 
-def generate_qr_from_details(bar_code: str, supply_id: str, description: tuple[str, str]) -> Image:
+def generate_qr_from_details(
+    bar_code: str, supply_id: str, description: tuple[str, str]
+) -> Image:
     qr_url = _generate_pop_stock_url(bar_code, supply_id)
     return _generate_qr(qr_url, description)

@@ -74,6 +74,8 @@ class Supply(TimeStampModel):
     )
     amount = models.DecimalField(decimal_places=1, max_digits=5)
     expiration_date = models.DateField()
+    printed_once = models.BooleanField(default=False)
+    scheduled_print = models.BooleanField(default=False)
 
     objects = SupplyQuerySet.as_manager()
 

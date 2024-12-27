@@ -1,5 +1,6 @@
-from django.views.generic import RedirectView
 from urllib.parse import urlencode
+
+from django.views.generic import RedirectView
 
 
 class QrCodeRedirectView(RedirectView):
