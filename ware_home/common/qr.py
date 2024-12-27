@@ -40,7 +40,7 @@ def _generate_qr(content: str, description: str) -> Image:
     text_height = bbox[3] - bbox[1]
 
     text_x = (width - text_width) // 2
-    text_y = height - text_height + 20
+    text_y = height - text_height + 25
 
     draw.text((text_x, text_y), description, fill="black", font=font)
 

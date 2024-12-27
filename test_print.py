@@ -7,7 +7,7 @@ def run(print=False):
 
     # Generate image:
     qr_img = _generate_qr(url, "(45): Zupa pomidorowa babci zosi")
-    concatenated = _concat_images_into_two_rows([qr_img])
+    concatenated = _concat_images_into_two_rows([qr_img, qr_img, qr_img])
 
     if not print:
         qr_img.save("s.png")
