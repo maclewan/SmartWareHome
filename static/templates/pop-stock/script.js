@@ -143,6 +143,7 @@ async function fetchAndProcessSupplies(bar_code) {
   if (suppliesResponseData.length === 1) {
     const input = tableTbody.querySelector("tr").querySelector("input")
     input.checked = true
+    showPopupMessage("partial", "Picked...")
   }
   else if (supply_id !== null) {
     const row = document.getElementById(`supp-table-row-${supply_id}`)
