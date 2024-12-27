@@ -108,7 +108,7 @@ def _concat_images_into_two_rows(image_list: list[Image]) -> Image:
 
     if len(image_list) % 2 == 1:
         # Adjust to print in 2 columns
-        image_list += [image_list[-1]]
+        image_list += [Image.new("RGB", (img_width, img_height), color=(255, 255, 255))]
 
     rows = len(image_list) / 2
 

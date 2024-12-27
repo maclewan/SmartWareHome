@@ -8,7 +8,7 @@ def _generate_qr_for_supply(supply: Supply) -> Image:
     bar_code = supply.product.bar_code
     supply_id = str(supply.id)
     product_name = supply.product.name
-    description = f"({supply_id}): {product_name}"
+    description = f"[{supply_id}]: {bar_code}", product_name
     return generate_qr_from_details(bar_code, supply_id, description)
 
 

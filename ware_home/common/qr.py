@@ -8,13 +8,13 @@ from qrcode import QRCode
 from qrcode.image.pil import PilImage
 
 
-def _generate_qr(content: str, description: str) -> Image:
+def _generate_qr(content: str, description: tuple[str, str]) -> Image:
     target_dimensions = (settings.TARGET_QR_WIDTH, settings.TARGET_QR_WIDTH)
     qr = QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
         box_size=20,
-        border=0,
+        border=1,
     )
     qr.add_data(content)
     qr.make(fit=True)
@@ -30,19 +30,39 @@ def _generate_qr(content: str, description: str) -> Image:
     new_image.paste(image, (0, 0))
 
     draw = ImageDraw.Draw(new_image)
-    font = ImageFont.load_default(size=22)
 
-    if len(description) > 29:
-        description = description[:27] + "..."
+    descr_line_1, descr_line_2 = description
 
-    bbox = draw.textbbox((0, 0), description, font=font)
+    # Line 1
+    font = ImageFont.load_default(size=30)
+    bbox = draw.textbbox((0, 0), descr_line_1, font=font)
     text_width = bbox[2] - bbox[0]
     text_height = bbox[3] - bbox[1]
 
     text_x = (width - text_width) // 2
-    text_y = height - text_height + 25
+    text_y = height - text_height + 15
 
-    draw.text((text_x, text_y), description, fill="black", font=font)
+    draw.text((text_x, text_y), descr_line_1, fill="black", font=font)
+
+    # Line 2
+    if len(descr_line_2) > 27:
+        descr_line_2 = descr_line_2[:25] + "..."
+
+    font = ImageFont.load_default(size=25)
+    bbox = draw.textbbox((0, 0), descr_line_2, font=font)
+    text_width = bbox[2] - bbox[0]
+    text_height = bbox[3] - bbox[1]
+
+    text_x = (width - text_width) // 2
+    text_y = height - text_height + 45
+
+    draw.text((text_x, text_y), descr_line_2, fill="black", font=font)
+
+
+
+
+
+
 
     return new_image
 
@@ -56,6 +76,6 @@ def _generate_pop_stock_url(bar_code: str, supply_id: str) -> str:
     return qr_url
 
 
-def generate_qr_from_details(bar_code: str, supply_id: str, description: str) -> Image:
+def generate_qr_from_details(bar_code: str, supply_id: str, description: tuple[str, str]) -> Image:
     qr_url = _generate_pop_stock_url(bar_code, supply_id)
     return _generate_qr(qr_url, description)

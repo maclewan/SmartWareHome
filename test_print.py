@@ -3,10 +3,10 @@ from ware_home.common.sticker_printer import _concat_images_into_two_rows, _get_
 
 
 def run(print=False):
-    url = "qr.wikamaciek.pl/qr/123456789/44/"
+    url = "qr.wikamaciek.pl/qr/123456789/45/"
 
     # Generate image:
-    qr_img = _generate_qr(url, "(45): Zupa pomidorowa babci zosi")
+    qr_img = _generate_qr(url, ("[45]: 123456789", "Zupa pomidorowa babci zosi"))
     concatenated = _concat_images_into_two_rows([qr_img, qr_img, qr_img])
 
     if not print:
