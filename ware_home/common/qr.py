@@ -33,7 +33,7 @@ def _generate_qr(content: str, description: tuple[str, str]) -> Image:
     descr_line_1, descr_line_2 = description
 
     # Line 1
-    font = ImageFont.truetype(font_path, size=30)
+    font = ImageFont.truetype(font_path, size=32)
     bbox = draw.textbbox((0, 0), descr_line_1, font=font)
     text_width = bbox[2] - bbox[0]
     text_height = bbox[3] - bbox[1]
@@ -44,10 +44,10 @@ def _generate_qr(content: str, description: tuple[str, str]) -> Image:
     draw.text((text_x, text_y), descr_line_1, fill="black", font=font)
 
     # Line 2
-    if len(descr_line_2) > 27:
-        descr_line_2 = descr_line_2[:25] + "..."
+    if len(descr_line_2) > 26:
+        descr_line_2 = descr_line_2[:24] + "..."
 
-    font = ImageFont.truetype(font_path, size=25)
+    font = ImageFont.truetype(font_path, size=27)
     bbox = draw.textbbox((0, 0), descr_line_2, font=font)
     text_width = bbox[2] - bbox[0]
     text_height = bbox[3] - bbox[1]
