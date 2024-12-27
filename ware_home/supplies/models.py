@@ -71,8 +71,18 @@ class SupplyQuerySet(models.QuerySet):
         self.update(scheduled_print=True)
         return self
 
+    def un_schedule_for_print(self):
+        self.update(scheduled_print=False)
+        return self
+
+    def prefetch_product(self):
+        return self.select_related("product")
+
     def scheduled_for_print(self):
-        return self.filter(scheduled_print=True).select_related("product")
+        return self.filter(scheduled_print=True).prefetch_product()
+
+    def not_printed(self):
+        return self.filter(printed_once=False)
 
     def mark_as_printed(self):
         self.update(scheduled_print=False, printed_once=True)

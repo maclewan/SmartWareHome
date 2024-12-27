@@ -49,13 +49,31 @@ class SupplyAdmin(NoQuerySetAdminActionsMixin, admin.ModelAdmin):
 
     get_expiration_days.short_description = "Days left"
 
-    @admin.action(description="Mark selected supplies to schedule for print")
+    @admin.action(description="Schedule for print")
     def schedule_for_print(self, request, queryset):
         queryset.schedule_for_print()
 
+    @admin.action(description="Schedule all not-printed for print")
+    def schedule_not_printed_for_print(self, request):
+        qs = Supply.objects.not_printed()
+        qs.schedule_for_print()
+
+    @admin.action(description="Unschedule all")
+    def unschedule_all(self, request):
+        Supply.objects.un_schedule_for_print()
+
+    @admin.action(description="Print selected instantly")
+    def instant_print(self, request, queryset):
+        queryset.prefetch_product()
+        self._perform_print(queryset, request)
+
     @admin.action(description="Print qr-codes batch")
-    def perform_print(self, request):
+    def batch_print(self, request):
         qs = Supply.objects.scheduled_for_print()
+        self._perform_print(qs, request)
+
+    @staticmethod
+    def _perform_print(qs, request):
         try:
             images_list = bulk_generate_qrs_for_supplies(qs)
             result = batch_print_qr(images_list)
@@ -68,8 +86,18 @@ class SupplyAdmin(NoQuerySetAdminActionsMixin, admin.ModelAdmin):
         except Exception as e:
             messages.add_message(request, messages.ERROR, f"Printing error! '{e}'")
 
-    actions = ["schedule_for_print", "perform_print"]
-    no_queryset_actions = ["perform_print"]
+    actions = [
+        "schedule_not_printed_for_print",
+        "schedule_for_print",
+        "batch_print",
+        "instant_print",
+        "unschedule_all",
+    ]
+    no_queryset_actions = [
+        "batch_print",
+        "schedule_not_printed_for_print",
+        "unschedule_all",
+    ]
 
 
 admin.site.register(Category, CategoryAdmin)
