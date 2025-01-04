@@ -1,0 +1,11 @@
+services:
+  django:
+    environment:
+      BASE_DOMAIN: "https://0.0.0.0:7983"
+    build: .
+    restart: always
+    command: bash -c "python manage.py migrate && python manage.py runserver_plus 0.0.0.0:7983 --cert-file cert.crt"
+    volumes:
+      - .:/backend_app
+    ports:
+      - "7983:7983"
