@@ -10,7 +10,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-CSRF_TRUSTED_ORIGINS = ["http://0.0.0.0", "https://supplies.lewandowicz.it/"]
+CSRF_TRUSTED_ORIGINS = ["http://0.0.0.0", "https://supplies.lewandowicz.it"]
 
 # Application definition
 DJANGO_APPS = [
