@@ -105,5 +105,5 @@ class StockListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
                     default=Value(""),
                 )
             )
-            .order_by("days_to_closes_expiration_date")
+            .order_by(F("days_to_closes_expiration_date").asc(nulls_last=True))
         )

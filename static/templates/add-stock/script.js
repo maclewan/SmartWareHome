@@ -193,10 +193,9 @@ async function handleAdd() {
       return
     }
   }
-
   let payload = {
     amount: mainForm.elements["amount"].value,
-    expiration_date: mainForm.elements["exp_date"].value,
+    expiration_date: mainForm.elements["exp_date"].value === '' ? null : mainForm.elements["exp_date"].value,
     product: productId,
   }
   let response = await fetch("/api/supplies/supply/", {

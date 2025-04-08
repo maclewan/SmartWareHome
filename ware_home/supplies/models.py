@@ -94,7 +94,7 @@ class Supply(TimeStampModel):
         Product, on_delete=models.CASCADE, related_name="supplies"
     )
     amount = models.DecimalField(decimal_places=1, max_digits=5)
-    expiration_date = models.DateField()
+    expiration_date = models.DateField(null=True, blank=True, default=None)
     printed_once = models.BooleanField(default=False)
     scheduled_print = models.BooleanField(default=False)
 
