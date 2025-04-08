@@ -168,6 +168,7 @@ async function fetchAndProcessSupplies(bar_code) {
 }
 
 function handleSupplySelectChanged() {
+	// Fixme this needs to be set to -1 or to -0.5 if what is left is -0.5
 	document.getElementById("pop-amount-input").value = "-1"
 }
 
@@ -224,7 +225,7 @@ async function handlePopClicked() {
 	})
 
 	if (response.status === 200) {
-		showPopupMessage("yes", "Supply popped properly.")
+		showPopupMessage("yes", "Supply updated properly.")
 	} else if (response.status === 204) {
 		showPopupMessage("yes", "Supply removed.")
 	} else {

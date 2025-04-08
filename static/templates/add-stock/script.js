@@ -201,6 +201,11 @@ async function handleAdd() {
         showPopupMessage("partial", "Fill out all fields...")
         return
     }
+    if (document.getElementById("amount").valueAsNumber <= 0) {
+    	showPopupMessage("partial", "Amount need to be greater than 0")
+    	return
+    }
+
     if (!productExists) {
         productId = await createProduct()
     }
@@ -256,7 +261,7 @@ async function handleAdd() {
             showPopupMessage("no", "Supply was not udated properly...")
             return
         }
-        showPopupMessage("yes", `Supply for "${mainForm.elements["prod_name"].value}" + (${payload.amount_to_pop} pcs) updated.`)
+        showPopupMessage("yes", `Supply for "${mainForm.elements["prod_name"].value}" + (${document.getElementById("amount").valueAsNumber} pcs) updated.`)
     }
     resetProductAddForm()
 }
