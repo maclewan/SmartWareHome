@@ -54,6 +54,7 @@ class SupplyPopApiView(views.APIView):
         return get_object_or_404(self.queryset, id=self.kwargs["id"])
 
     def post(self, request, *args, **kwargs):
+        # Allows both increment and decrementing supply amount
         instance = self.get_object()
         serializer = self.serializer_class(
             data=request.data, context={"instance": instance}
