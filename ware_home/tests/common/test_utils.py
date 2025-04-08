@@ -18,6 +18,10 @@ from ware_home.common.utils import check_expiration_date, get_expiration_days
             Mock(expiration_date=tz.now().date() + tz.timedelta(days=-3)),
             -3,
         ),
+        (
+            Mock(expiration_date=None),
+            None,
+        ),
     ],
 )
 def test_expiration_days(obj, days):
@@ -43,6 +47,10 @@ def test_expiration_days(obj, days):
         (
             Mock(expiration_date=tz.now().date() + tz.timedelta(days=-5)),
             True,
+        ),
+        (
+            Mock(expiration_date=None),
+            False,
         ),
     ],
 )
