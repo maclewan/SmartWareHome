@@ -63,7 +63,11 @@
 						<td class="table-cell">{{ product.id }}</td>
 						<td class="table-cell">{{ product.name }} [{{ product.volume }}]</td>
 						<td class="table-cell">{{ product.supplies_sum }}</td>
-						<td class="table-cell">{{ product.days_to_closes_expiration_date }} days</td>
+						{% if product.days_to_closes_expiration_date == None %}
+						    <td class="table-cell"> ---- </td>
+						{% else %}+
+							<td class="table-cell">{{ product.days_to_closes_expiration_date}} days </td>
+						{%  endif %}
 						<td class="table-cell prod-pop-btn">
 							<button
 								onclick="window.location.href='{% url 'stock-pop' %}?bar_code={{ product.bar_code }}';">

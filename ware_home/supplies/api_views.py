@@ -1,3 +1,4 @@
+from django.db.models import F
 from rest_framework import generics, status, views
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
@@ -40,7 +41,7 @@ class SupplyFilterApiView(generics.ListAPIView):
             self.queryset.prefetch_product()
             .annotate_expiration_state()
             .filter(product__bar_code=self.kwargs["bar_code"])
-            .order_by("expiration_date")
+            .order_by(F("expiration_date").asc(nulls_last=True))
         )
 
 

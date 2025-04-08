@@ -1,3 +1,5 @@
+from datetime import date
+
 from rest_framework import serializers
 
 from ware_home.supplies.models import Category, Product, Supply
@@ -19,6 +21,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class SupplySerializer(serializers.ModelSerializer):
     expiration_state = serializers.CharField(read_only=True)
+    expiration_date = serializers.DateField(default=None, allow_null=True)
 
     class Meta:
         model = Supply
