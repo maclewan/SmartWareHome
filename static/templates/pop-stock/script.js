@@ -14,6 +14,20 @@ document.getElementById("btn-decr").onclick = () => {
 }
 document.getElementById("button-pop").onclick = handlePopClicked
 
+document.getElementById("pop-amount-input").onchange = handleAmountChanged
+
+
+function handleAmountChanged() {
+	const input = document.getElementById("pop-amount-input")
+	const successButton = document.getElementById("button-pop")
+	if (input.valueAsNumber > 0 ) {
+		successButton.innerHTML = "Restock"
+	}
+	else {
+		successButton.innerHTML = "Pop"
+	}
+}
+
 function handlePageLoaded() {
 	const bar_code = getUrlParam('bar_code')
 	if (bar_code === null) return;
@@ -154,7 +168,7 @@ async function fetchAndProcessSupplies(bar_code) {
 }
 
 function handleSupplySelectChanged() {
-	document.getElementById("pop-amount-input").value = "1.0"
+	document.getElementById("pop-amount-input").value = "-1"
 }
 
 function clearTable(tableTbody) {
@@ -173,12 +187,15 @@ function handleIncrDecrClicked(increment) {
 	const amount = document.getElementById(`supp-amount-${selectedInput.value}`).innerText
 
 	const input = document.getElementById("pop-amount-input")
-	const newValue = input.valueAsNumber + 0.5 * (increment ? 1 : -1)
-	if (newValue <= 0 || newValue > Number(amount)) {
+	let newValue = input.valueAsNumber + 0.5 * (increment ? 1 : -1)
+	if (-newValue > Number(amount)) {
 		return
 	}
+	if (newValue === 0) {
+		newValue = increment ? 0.5 : -0.5
+	}
 	input.value = newValue.toFixed(1)
-
+	handleAmountChanged()
 }
 
 function getRequestHeaders() {
@@ -199,7 +216,7 @@ async function handlePopClicked() {
 	}
 	const selectedSupplyId = selectedInput.value
 	const payload = {
-		amount_to_pop: document.getElementById("pop-amount-input").valueAsNumber
+		amount_to_pop: -document.getElementById("pop-amount-input").valueAsNumber
 	}
 
 	const response = await fetch(`/api/supplies/supply/pop-amount/${selectedSupplyId}/`, {
