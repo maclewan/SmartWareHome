@@ -63,10 +63,17 @@
 					  placeholder="Enter description"></textarea>
 		</div>
 
+		<div class="form-group">
+			<label for="entities">Supply entities:</label>
+			<select id="entities" name="entities" disabled="disabled">
+				<option value="">---</option>
+			</select>
+		</div>
+
 		<div class="horizontal-group">
 			<div class="form-group">
 				<label for="amount">Amount:</label>
-				<input type="number" id="amount" name="amount" class="form-control" placeholder="Enter amount" required>
+				<input type="number" id="amount" name="amount" class="form-control" placeholder="Enter amount" required min="0,5">
 			</div>
 
 			<div class="form-group">
