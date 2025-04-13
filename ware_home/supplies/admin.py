@@ -1,4 +1,3 @@
-from better_filter_widget import BetterFilterWidget
 from django.contrib import admin, messages
 from django_no_queryset_admin_actions import NoQuerySetAdminActionsMixin
 
