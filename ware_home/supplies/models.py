@@ -35,7 +35,7 @@ class Product(models.Model):
     bar_code = models.CharField(max_length=63, unique=True)
     description = models.TextField()
     volume = models.CharField(max_length=127, null=True, blank=True)
-    categories = models.ManyToManyField(Category)
+    categories = models.ManyToManyField(Category, blank=True)
 
     objects = ProductQuerySet.as_manager()
 
@@ -108,7 +108,10 @@ class Supply(TimeStampModel):
 
 
 class DemandTag(models.Model):
-    product = models.OneToOneField(
-        Product, on_delete=models.CASCADE, related_name="demand_tag"
-    )
-    amount = models.DecimalField(decimal_places=1, max_digits=5)
+    min_amount = models.DecimalField(decimal_places=1, max_digits=5)
+    name = models.CharField(max_length=63)
+    # following could and should be just a FK, but m2m was used to make admin impl easier
+    products = models.ManyToManyField(Product, related_name="demand_tags", blank=True)
+
+    def __str__(self):
+        return f"Tag #{self.id} {self.name}"

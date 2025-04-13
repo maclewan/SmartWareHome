@@ -41,13 +41,18 @@ function fetchAndFillProductData(bar_code) {
         })
 }
 
-async function handleSuppliesResponse(response) {
-    const responseData = await response.json()
-    console.log(responseData)
-    const suppliesSelect = document.getElementById("entities")
+function resetSupplyEntities() {
+	const suppliesSelect = document.getElementById("entities")
     while (suppliesSelect.options.length > 1) {
         suppliesSelect.remove(1);
     }
+}
+
+async function handleSuppliesResponse(response) {
+    const responseData = await response.json()
+    const suppliesSelect = document.getElementById("entities")
+    resetSupplyEntities()
+
     if (responseData.length > 0) {
         suppliesSelect.disabled = null
     } else {
@@ -68,6 +73,7 @@ function resetProductData() {
     mainForm.elements["bar_code"].value = ""
     mainForm.elements["amount"].value = ""
     mainForm.elements["exp_date"].value = ""
+    mainForm.elements["demand_tag"].value = ""
 }
 
 function resetProductVariables() {
@@ -76,10 +82,10 @@ function resetProductVariables() {
     productId = undefined
 }
 
-
 function resetProductAddForm() {
     mainForm.reset()
     resetProductVariables()
+    resetSupplyEntities()
 }
 
 function softResetProductAddForm() {
@@ -91,10 +97,11 @@ function storeOriginalProductData(responseData) {
     productOriginalData.prod_name = responseData.name
     productOriginalData.volume = responseData.volume
     productOriginalData.description = responseData.description
+    productOriginalData.demand_tag = responseData.demand_tag
 }
 
 function hasOriginalProductDataChanged() {
-    return ["prod_name", "volume", "description"].map(
+    return ["prod_name", "volume", "description", "demand_tag"].map(
         (key) =>
             productOriginalData[key] === mainForm.elements[key].value
     ).some((val) => val === false)
@@ -107,11 +114,13 @@ async function handleProductResponse(bar_code, response) {
         return true
     }
 
-    const responseData = await response.json()
+    let responseData = await response.json()
 
+	console.log(responseData)
     mainForm.elements["prod_name"].value = responseData.name
     mainForm.elements["volume"].value = responseData.volume
     mainForm.elements["description"].value = responseData.description
+    mainForm.elements["demand_tag"].value = responseData.demand_tag
     mainForm.elements["bar_code"].readOnly = true
     productId = responseData.id
 
@@ -125,6 +134,7 @@ function getProductPayload() {
         bar_code: mainForm.elements["bar_code"].value,
         description: mainForm.elements["prod_name"].value,
         volume: mainForm.elements["volume"].value,
+        demand_tags: [mainForm.elements["demand_tag"].value],
     }
 }
 

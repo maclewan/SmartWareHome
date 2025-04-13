@@ -15,7 +15,7 @@ from django.db.models.functions import Cast
 from django.utils import timezone
 from django.views.generic import TemplateView
 
-from ware_home.supplies.models import Category, Product
+from ware_home.supplies.models import Category, DemandTag, Product
 from ware_home.supplies.serializers import ProductFilterViewSerializer
 
 
@@ -42,6 +42,7 @@ class AddStockView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["products"] = Product.objects.all().order_by("name")
+        context["demand_tags"] = DemandTag.objects.all()
         return context
 
 

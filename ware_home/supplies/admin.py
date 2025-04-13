@@ -1,3 +1,4 @@
+from better_filter_widget import BetterFilterWidget
 from django.contrib import admin, messages
 from django_no_queryset_admin_actions import NoQuerySetAdminActionsMixin
 
@@ -12,7 +13,7 @@ class CategoryAdmin(admin.ModelAdmin):
     pass
 
 
-class DemandTagAdmin(admin.ModelAdmin):
+class DemandTagAdmin(AutoFilterHorizontalMixin, admin.ModelAdmin):
     pass
 
 

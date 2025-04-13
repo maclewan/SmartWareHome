@@ -57,10 +57,24 @@
 					   placeholder="Volume" required>
 			</div>
 		</div>
-		<div class="form-group">
-			<label for="description">Description:</label>
-			<textarea id="description" name="description" class="form-control"
-					  placeholder="Enter description"></textarea>
+
+		<div class="horizontal-group">
+			<div class="form-group">
+				<label for="description">Description:</label>
+				<textarea id="description" name="description" class="form-control"
+						  placeholder="Enter description"></textarea>
+			</div>
+
+			<div class="form-group">
+				<label for="demand_tag">Demand Tag:</label>
+				<select id="demand_tag" name="demand_tag" class="form-control">
+					<option value="">---</option>
+					{% for demand_tag in demand_tags %}
+						<option class="product-item" value="{{ demand_tag.id }}">{{ demand_tag.name }}
+						</option>
+					{% endfor %}
+				</select>
+			</div>
 		</div>
 
 		<div class="form-group">
@@ -73,7 +87,7 @@
 		<div class="horizontal-group">
 			<div class="form-group">
 				<label for="amount">Amount:</label>
-				<input type="number" id="amount" name="amount" class="form-control" placeholder="Enter amount" required">
+				<input type="number" id="amount" name="amount" class="form-control" placeholder="Enter amount" required>
 			</div>
 
 			<div class="form-group">

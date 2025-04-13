@@ -2,7 +2,7 @@ from datetime import date
 
 from rest_framework import serializers
 
-from ware_home.supplies.models import Category, Product, Supply
+from ware_home.supplies.models import Category, DemandTag, Product, Supply
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -13,10 +13,23 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     categories = CategorySerializer(many=True, read_only=True)
+    demand_tags = serializers.PrimaryKeyRelatedField(
+        queryset=DemandTag.objects.all(), many=True, write_only=True
+    )
+    demand_tag = serializers.CharField(source="demand_tags.first.id", read_only=True)
 
     class Meta:
         model = Product
-        fields = "__all__"
+        fields = [
+            "bar_code",
+            "demand_tags",
+            "demand_tag",
+            "description",
+            "id",
+            "name",
+            "volume",
+            "categories",
+        ]
 
 
 class SupplySerializer(serializers.ModelSerializer):

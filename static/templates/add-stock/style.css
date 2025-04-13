@@ -18,10 +18,6 @@ button {
     height: 10vw;
 }
 
-textarea {
-    height: 4vh;
-}
-
 .container {
     width: 100%;
     height: 90%;
@@ -63,6 +59,15 @@ textarea {
 }
 
 #bar_code {
+    width: 30vw;
+}
+
+#description {
+    width: 30vw;
+    height: 3vh;
+}
+
+#demand_tag {
     width: 30vw;
 }
 

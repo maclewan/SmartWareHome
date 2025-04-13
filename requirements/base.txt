@@ -12,5 +12,6 @@ user-agents==2.2.0
 qrcode[pil]
 phomemo-printer==1.0.5
 django-no-queryset-admin-actions
+django-better-filter-widget
 
 srutil==1.0.3  # Fixing depencencies issues
