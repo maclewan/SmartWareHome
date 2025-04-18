@@ -129,12 +129,13 @@ async function handleProductResponse(bar_code, response) {
 }
 
 function getProductPayload() {
+	const demandTagValue = mainForm.elements["demand_tag"].value
     return {
         name: mainForm.elements["prod_name"].value,
         bar_code: mainForm.elements["bar_code"].value,
         description: mainForm.elements["prod_name"].value,
         volume: mainForm.elements["volume"].value,
-        demand_tags: [mainForm.elements["demand_tag"].value],
+        demand_tags: demandTagValue === "" ? [] : [demandTagValue],
     }
 }
 
