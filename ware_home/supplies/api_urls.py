@@ -1,6 +1,7 @@
 from django.urls import path
 
 from .api_views import (
+    DemandSummaryView,
     ProductCreateApiView,
     ProductDetailApiView,
     SupplyCreateApiView,
@@ -33,5 +34,10 @@ urlpatterns = [
         "supply/pop-amount/<int:id>/",
         SupplyPopApiView.as_view(),
         name="supply-pop-amount",
+    ),
+    path(
+        "demand/summary/",
+        DemandSummaryView.as_view(),
+        name="demand-summary",
     ),
 ]

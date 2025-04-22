@@ -2,7 +2,7 @@ import factory
 from factory import Faker, SubFactory
 from factory.django import DjangoModelFactory
 
-from ware_home.supplies.models import Category, Product, Supply
+from ware_home.supplies.models import Category, DemandTag, Product, Supply
 
 
 class CategoryFactory(DjangoModelFactory):
@@ -37,3 +37,8 @@ class SupplyFactory(DjangoModelFactory):
     product = SubFactory(ProductFactory)
     amount = Faker("pyint", min_value=1, max_value=5)
     expiration_date = Faker("date_this_month")
+
+
+class DemandTagFactory(DjangoModelFactory):
+    class Meta:
+        model = DemandTag

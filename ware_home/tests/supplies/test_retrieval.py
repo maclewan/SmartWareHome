@@ -5,7 +5,12 @@ from django.utils import timezone
 from rest_framework import status
 
 from ware_home.supplies.models import Supply
-from ware_home.tests.factories import CategoryFactory, ProductFactory, SupplyFactory
+from ware_home.tests.factories import (
+    CategoryFactory,
+    DemandTagFactory,
+    ProductFactory,
+    SupplyFactory,
+)
 from ware_home.tests.typing import AnyDateTime, AnyInteger
 
 pytestmark = pytest.mark.django_db
@@ -175,3 +180,164 @@ def test_pop_supply_zero_amount(admin_api_client):
         supply.refresh_from_db()
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
+
+
+def test_demand_summary_list_no_supply(unauth_api_client):
+    p1 = ProductFactory(name="prod1")
+    p2 = ProductFactory(name="prod2")
+    p3 = ProductFactory(name="prod3")
+
+    demand1 = DemandTagFactory(name="demand1", min_amount="5")
+    demand2 = DemandTagFactory(name="demand2", min_amount="10")
+    demand1.products.set([p1, p2])
+    demand2.products.set([p3])
+
+    url = reverse("demand-summary")
+    response = unauth_api_client.get(url)
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json() == [
+        {
+            "count_in_stock": "0.00",
+            "id": 1,
+            "min_amount": "5.0",
+            "name": "demand1",
+            "products": [
+                {
+                    "bar_code": p1.bar_code,
+                    "id": p1.id,
+                    "name": "prod1",
+                    "volume": p1.volume,
+                },
+                {
+                    "bar_code": p2.bar_code,
+                    "id": p2.id,
+                    "name": "prod2",
+                    "volume": p2.volume,
+                },
+            ],
+        },
+        {
+            "count_in_stock": "0.00",
+            "id": 2,
+            "min_amount": "10.0",
+            "name": "demand2",
+            "products": [
+                {
+                    "bar_code": p3.bar_code,
+                    "id": p3.id,
+                    "name": "prod3",
+                    "volume": p3.volume,
+                }
+            ],
+        },
+    ]
+
+
+def test_demand_summary_list_all_fulfilled(unauth_api_client):
+    p1 = ProductFactory(name="prod1")
+    p2 = ProductFactory(name="prod2")
+    p3 = ProductFactory(name="prod3")
+
+    demand1 = DemandTagFactory(name="demand1", min_amount="5")
+    demand2 = DemandTagFactory(name="demand2", min_amount="10")
+    demand1.products.set([p1, p2])
+    demand2.products.set([p3])
+
+    SupplyFactory(product=p1, amount=15)
+    SupplyFactory(product=p3, amount=20)
+
+    url = reverse("demand-summary")
+    response = unauth_api_client.get(url)
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json() == []
+
+
+def test_demand_summary_list_partially_fulfilled(unauth_api_client):
+    p1 = ProductFactory(name="prod1")
+    p2 = ProductFactory(name="prod2")
+    p3 = ProductFactory(name="prod3")
+
+    demand1 = DemandTagFactory(name="demand1", min_amount="5")
+    demand2 = DemandTagFactory(name="demand2", min_amount="10")
+    demand1.products.set([p1, p2])
+    demand2.products.set([p3])
+
+    SupplyFactory(product=p1, amount=1)
+    SupplyFactory(product=p2, amount=2)
+    SupplyFactory(product=p3, amount=4)
+
+    url = reverse("demand-summary")
+    response = unauth_api_client.get(url)
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json() == [
+        {
+            "count_in_stock": "3.00",
+            "id": 1,
+            "min_amount": "5.0",
+            "name": "demand1",
+            "products": [
+                {
+                    "bar_code": p1.bar_code,
+                    "id": p1.id,
+                    "name": "prod1",
+                    "volume": p1.volume,
+                },
+                {
+                    "bar_code": p2.bar_code,
+                    "id": p2.id,
+                    "name": "prod2",
+                    "volume": p2.volume,
+                },
+            ],
+        },
+        {
+            "count_in_stock": "4.00",
+            "id": 2,
+            "min_amount": "10.0",
+            "name": "demand2",
+            "products": [
+                {
+                    "bar_code": p3.bar_code,
+                    "id": p3.id,
+                    "name": "prod3",
+                    "volume": p3.volume,
+                }
+            ],
+        },
+    ]
+
+
+def test_demand_summary_list_one_fulfilled(unauth_api_client):
+    p1 = ProductFactory(name="prod1")
+    p2 = ProductFactory(name="prod2")
+    p3 = ProductFactory(name="prod3")
+
+    demand1 = DemandTagFactory(name="demand1", min_amount="5")
+    demand2 = DemandTagFactory(name="demand2", min_amount="10")
+    demand1.products.set([p1, p2])
+    demand2.products.set([p3])
+
+    SupplyFactory(product=p1, amount=1)
+    SupplyFactory(product=p2, amount=2)
+    SupplyFactory(product=p2, amount=5)
+    SupplyFactory(product=p3, amount=4)
+
+    url = reverse("demand-summary")
+    response = unauth_api_client.get(url)
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json() == [
+        {
+            "count_in_stock": "4.00",
+            "id": 2,
+            "min_amount": "10.0",
+            "name": "demand2",
+            "products": [
+                {
+                    "bar_code": p3.bar_code,
+                    "id": p3.id,
+                    "name": "prod3",
+                    "volume": p3.volume,
+                }
+            ],
+        },
+    ]

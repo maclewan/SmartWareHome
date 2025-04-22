@@ -72,3 +72,24 @@ class ProductFilterViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = "__all__"
+
+
+class ProductDemandSummarySerializer(ProductSerializer):
+    class Meta(ProductSerializer.Meta):
+        fields = [
+            "id",
+            "bar_code",
+            "name",
+            "volume",
+        ]
+
+
+class DemandTagSummarySerializer(serializers.ModelSerializer):
+    products = ProductDemandSummarySerializer(many=True, read_only=True)
+    count_in_stock = serializers.DecimalField(
+        decimal_places=2, max_digits=10, read_only=True
+    )
+
+    class Meta:
+        model = DemandTag
+        fields = ["name", "id", "min_amount", "count_in_stock", "products"]

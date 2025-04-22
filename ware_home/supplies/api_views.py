@@ -1,11 +1,13 @@
-from django.db.models import F
+from django.db.models import Count, F, Sum
 from rest_framework import generics, status, views
-from rest_framework.generics import get_object_or_404
+from rest_framework.generics import ListAPIView, RetrieveAPIView, get_object_or_404
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 
-from ware_home.supplies.models import Product, Supply
+from ware_home.supplies.models import DemandTag, Product, Supply
 from ware_home.supplies.serializers import (
+    DemandTagSummarySerializer,
     ProductSerializer,
     SupplyPopSerializer,
     SupplySerializer,
@@ -71,3 +73,23 @@ class SupplyPopApiView(views.APIView):
         return Response(
             SupplySerializer(instance=instance).data, status=status.HTTP_200_OK
         )
+
+
+class DemandSummaryView(ListAPIView):
+    queryset = DemandTag.objects.none()
+    serializer_class = DemandTagSummarySerializer
+    authentication_classes = []
+    permission_classes = []
+    renderer_classes = [JSONRenderer]
+
+    def get_queryset(self):
+        qs = (
+            DemandTag.objects.all()
+            .prefetch_related("products")
+            .prefetch_related("products__supplies")
+        )
+        qs = qs.annotate(
+            count_in_stock=Sum("products__supplies__amount", default=0)
+        ).filter(count_in_stock__lt=F("min_amount"))
+
+        return qs
