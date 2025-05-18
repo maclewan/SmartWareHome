@@ -1,5 +1,6 @@
 from urllib.parse import urlencode
 
+from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import RedirectView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import JSONRenderer
@@ -31,3 +32,9 @@ class HealthCheckView(APIView):
 
     def get(self, request):
         return Response(200)
+
+
+class XFrameOptionsExemptMixin:
+    @xframe_options_exempt
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)

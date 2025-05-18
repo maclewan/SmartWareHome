@@ -15,6 +15,7 @@ from django.db.models.functions import Cast
 from django.utils import timezone
 from django.views.generic import TemplateView
 
+from ware_home.common.views import XFrameOptionsExemptMixin
 from ware_home.supplies.models import Category, DemandTag, Product
 from ware_home.supplies.serializers import (
     DemandTagSummarySerializer,
@@ -113,7 +114,7 @@ class StockListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
         )
 
 
-class DemandView(TemplateView):
+class DemandView(XFrameOptionsExemptMixin, TemplateView):
     template_name = "demand/demand.html"
 
     def get_context_data(self, **kwargs):
