@@ -7,6 +7,7 @@ from rest_framework.response import Response
 
 from ware_home.supplies.models import DemandTag, Product, Supply
 from ware_home.supplies.serializers import (
+    DemandHASerializer,
     DemandTagSummarySerializer,
     ProductSerializer,
     SupplyPopSerializer,
@@ -93,3 +94,26 @@ class DemandSummaryView(ListAPIView):
         ).filter(count_in_stock__lt=F("min_amount"))
 
         return qs
+
+
+class DemandSummaryHAView(RetrieveAPIView):
+    serializer_class = DemandHASerializer
+    authentication_classes = []
+    permission_classes = []
+    renderer_classes = [JSONRenderer]
+
+    def get_queryset(self):
+        qs = (
+            DemandTag.objects.all()
+            .prefetch_related("products")
+            .prefetch_related("products__supplies")
+        )
+        qs = qs.annotate(
+            count_in_stock=Sum("products__supplies__amount", default=0)
+        ).filter(count_in_stock__lt=F("min_amount"))
+
+        return qs
+
+    def retrieve(self, request, *args, **kwargs):
+        serializer = self.serializer_class(instance={"demand": self.get_queryset()})
+        return Response(serializer.data)

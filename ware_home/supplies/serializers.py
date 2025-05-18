@@ -93,3 +93,7 @@ class DemandTagSummarySerializer(serializers.ModelSerializer):
     class Meta:
         model = DemandTag
         fields = ["name", "id", "min_amount", "count_in_stock", "products"]
+
+
+class DemandHASerializer(serializers.Serializer):
+    demand = DemandTagSummarySerializer(many=True)

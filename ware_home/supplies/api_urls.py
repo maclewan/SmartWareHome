@@ -1,6 +1,7 @@
 from django.urls import path
 
 from .api_views import (
+    DemandSummaryHAView,
     DemandSummaryView,
     ProductCreateApiView,
     ProductDetailApiView,
@@ -39,5 +40,10 @@ urlpatterns = [
         "demand/summary/",
         DemandSummaryView.as_view(),
         name="demand-summary",
+    ),
+    path(
+        "demand/summary/ha/",
+        DemandSummaryHAView.as_view(),
+        name="demand-summary-ha",
     ),
 ]
