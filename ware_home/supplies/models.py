@@ -124,11 +124,14 @@ class DemandTagQueryset(models.QuerySet):
             )
         )
 
+    def all_ordered(self):
+        return self.all().order_by("name")
+
 
 class DemandTag(models.Model):
     min_amount = models.DecimalField(decimal_places=1, max_digits=5)
     name = models.CharField(max_length=63)
-    # following could and should be just a FK, but m2m was used to make admin impl easier
+    # the following could and should be just a FK, but m2m was used to make admin impl easier
     products = models.ManyToManyField(Product, related_name="demand_tags", blank=True)
 
     objects = DemandTagQueryset.as_manager()
