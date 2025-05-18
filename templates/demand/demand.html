@@ -1,6 +1,3 @@
-{#{% extends "base.html" %}#}
-{##}
-
 {% block styles %}
 	{% load static %}
 	<link rel="stylesheet" type="text/css" href="{% static 'templates/demand/style.css' %}">
@@ -9,10 +6,6 @@
 
 {% block content %}
 	{% load static %}
-
-	<script>
-		const CSRF_TOKEN = "{{ csrf_token }}"
-	</script>
 
 	{% for item in demand %}
 		<div style="margin-bottom: 2em; padding: 1em; border: 1px solid #ddd; border-radius: 8px;">
