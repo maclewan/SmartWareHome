@@ -7,27 +7,30 @@
 {% block content %}
 	{% load static %}
 
-	{% for item in demand %}
-		<div style="margin-bottom: 2em; padding: 1em; border: 1px solid #ddd; border-radius: 8px;">
-			<h3>{{ item.name }}</h3>
-			<p><strong>Stock:</strong> {{ item.count_in_stock }} / <strong>Expected:</strong> {{ item.min_amount }}</p>
-			<p><strong>MISSING: {{ item.missing_count }}</strong></p>
+	<div class="scroll-container">
+		{% for item in demand %}
+			<div class="item">
+				<h3>{{ item.name }}</h3>
+				<p><strong>Stock:</strong> {{ item.count_in_stock }} / <strong>Expected:</strong> {{ item.min_amount }}
+				</p>
+				<p class="missing">Missing: {{ item.missing_count }}</p>
 
-			{% if item.products %}
-				<p><strong>Products:</strong></p>
-				<ul>
-					{% for product in item.products %}
-						<li>
-							{{ product.name }} ({{ product.volume }})<br>
-							<small>Barcode: {{ product.bar_code }}</small>
-						</li>
-					{% endfor %}
-				</ul>
-			{% else %}
-				<p><em>No products listed</em></p>
-			{% endif %}
-		</div>
-	{% endfor %}
+				{% if item.products %}
+					<p><strong>Products:</strong></p>
+					<ul class="products">
+						{% for product in item.products %}
+							<li>
+								{{ product.name }} ({{ product.volume }})<br>
+								<small>Barcode: {{ product.bar_code }}</small>
+							</li>
+						{% endfor %}
+					</ul>
+				{% else %}
+					<p><em>No products listed</em></p>
+				{% endif %}
+			</div>
+		{% endfor %}
+	</div>
 
 
 
