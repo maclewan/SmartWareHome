@@ -12,6 +12,7 @@ body {
     margin: 2em;
     height: auto;
     min-height: 100%;
+    overflow-y: scroll;
 }
 
 .item {
