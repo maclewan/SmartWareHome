@@ -1,0 +1,41 @@
+{#{% extends "base.html" %}#}
+{##}
+
+{% block styles %}
+	{% load static %}
+	<link rel="stylesheet" type="text/css" href="{% static 'templates/demand/style.css' %}">
+{% endblock %}
+
+
+{% block content %}
+	{% load static %}
+
+	<script>
+		const CSRF_TOKEN = "{{ csrf_token }}"
+	</script>
+
+	{% for item in demand %}
+		<div style="margin-bottom: 2em; padding: 1em; border: 1px solid #ddd; border-radius: 8px;">
+			<h3>{{ item.name }}</h3>
+			<p><strong>Stock:</strong> {{ item.count_in_stock }} / <strong>Expected:</strong> {{ item.min_amount }}</p>
+			<p><strong>MISSING: {{ item.missing_count }}</strong></p>
+
+			{% if item.products %}
+				<p><strong>Products:</strong></p>
+				<ul>
+					{% for product in item.products %}
+						<li>
+							{{ product.name }} ({{ product.volume }})<br>
+							<small>Barcode: {{ product.bar_code }}</small>
+						</li>
+					{% endfor %}
+				</ul>
+			{% else %}
+				<p><em>No products listed</em></p>
+			{% endif %}
+		</div>
+	{% endfor %}
+
+
+
+{% endblock %}

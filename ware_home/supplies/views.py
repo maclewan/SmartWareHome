@@ -16,7 +16,10 @@ from django.utils import timezone
 from django.views.generic import TemplateView
 
 from ware_home.supplies.models import Category, DemandTag, Product
-from ware_home.supplies.serializers import ProductFilterViewSerializer
+from ware_home.supplies.serializers import (
+    DemandTagSummarySerializer,
+    ProductFilterViewSerializer,
+)
 
 
 class ScannerPocView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
@@ -108,3 +111,14 @@ class StockListView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
             )
             .order_by(F("days_to_closes_expiration_date").asc(nulls_last=True))
         )
+
+
+class DemandView(TemplateView):
+    template_name = "demand/demand.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["demand"] = DemandTagSummarySerializer(
+            instance=DemandTag.objects.demand_summary(), many=True
+        ).data
+        return context

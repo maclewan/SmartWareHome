@@ -201,6 +201,7 @@ def test_demand_summary_list_no_supply(unauth_api_client):
             "id": 1,
             "min_amount": "5.0",
             "name": "demand1",
+            "missing_count": "5.00",
             "products": [
                 {
                     "bar_code": p1.bar_code,
@@ -221,6 +222,7 @@ def test_demand_summary_list_no_supply(unauth_api_client):
             "id": 2,
             "min_amount": "10.0",
             "name": "demand2",
+            "missing_count": "10.00",
             "products": [
                 {
                     "bar_code": p3.bar_code,
@@ -275,6 +277,7 @@ def test_demand_summary_list_partially_fulfilled(unauth_api_client):
             "id": 1,
             "min_amount": "5.0",
             "name": "demand1",
+            "missing_count": "2.00",
             "products": [
                 {
                     "bar_code": p1.bar_code,
@@ -295,6 +298,7 @@ def test_demand_summary_list_partially_fulfilled(unauth_api_client):
             "id": 2,
             "min_amount": "10.0",
             "name": "demand2",
+            "missing_count": "6.00",
             "products": [
                 {
                     "bar_code": p3.bar_code,
@@ -331,6 +335,7 @@ def test_demand_summary_list_one_fulfilled(unauth_api_client):
             "id": 2,
             "min_amount": "10.0",
             "name": "demand2",
+            "missing_count": "6.00",
             "products": [
                 {
                     "bar_code": p3.bar_code,

@@ -89,11 +89,17 @@ class DemandTagSummarySerializer(serializers.ModelSerializer):
     count_in_stock = serializers.DecimalField(
         decimal_places=2, max_digits=10, read_only=True
     )
+    missing_count = serializers.DecimalField(
+        decimal_places=2, max_digits=10, read_only=True
+    )
 
     class Meta:
         model = DemandTag
-        fields = ["name", "id", "min_amount", "count_in_stock", "products"]
-
-
-class DemandHASerializer(serializers.Serializer):
-    demand = DemandTagSummarySerializer(many=True)
+        fields = [
+            "name",
+            "id",
+            "min_amount",
+            "count_in_stock",
+            "products",
+            "missing_count",
+        ]

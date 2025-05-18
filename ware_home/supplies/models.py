@@ -1,9 +1,11 @@
 from django.db import models
 from django.db.models import (
     Case,
+    DecimalField,
     DurationField,
     ExpressionWrapper,
     F,
+    FloatField,
     IntegerField,
     Sum,
     Value,
@@ -107,11 +109,29 @@ class Supply(TimeStampModel):
         return f"Supply #{self.id} {self.product.name}"
 
 
+class DemandTagQueryset(models.QuerySet):
+    def demand_summary(self):
+        return (
+            self.prefetch_related("products")
+            .prefetch_related("products__supplies")
+            .annotate(count_in_stock=Sum("products__supplies__amount", default=0))
+            .filter(count_in_stock__lt=F("min_amount"))
+            .annotate(
+                missing_count=ExpressionWrapper(
+                    F("min_amount") - F("count_in_stock"),
+                    output_field=DecimalField(),
+                )
+            )
+        )
+
+
 class DemandTag(models.Model):
     min_amount = models.DecimalField(decimal_places=1, max_digits=5)
     name = models.CharField(max_length=63)
     # following could and should be just a FK, but m2m was used to make admin impl easier
     products = models.ManyToManyField(Product, related_name="demand_tags", blank=True)
+
+    objects = DemandTagQueryset.as_manager()
 
     def __str__(self):
         return f"Tag #{self.id} {self.name}"

@@ -1,0 +1,43 @@
+body {
+    background-color: #121212;
+    color: #e0e0e0;
+    font-family: sans-serif;
+    font-size: 14px;
+    margin: 2em;
+  }
+
+  .item {
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 1em;
+    margin-bottom: 1em;
+  }
+
+  .item h3 {
+    margin-top: 0;
+    color: #fff;
+    font-size: 1.1em;
+  }
+
+  .item p {
+    margin: 0.3em 0;
+  }
+
+  .products {
+    margin-top: 0.5em;
+    padding-left: 1.2em;
+  }
+
+  .products li {
+    margin-bottom: 0.2em;
+  }
+
+  small {
+    color: #aaa;
+  }
+
+  .missing {
+    color: #ff5f5f;
+    font-weight: bold;
+  }
